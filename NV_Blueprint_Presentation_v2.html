@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Next Vision — The Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & ROOT VARIABLES
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #CC0000;
+  --red-dark: #990000;
+  --red-glow: rgba(204,0,0,0.15);
+  --black: #000000;
+  --off-black: #0A0A0A;
+  --gray-1: #111111;
+  --gray-2: #1A1A1A;
+  --gray-3: #2A2A2A;
+  --gray-4: #444444;
+  --gray-5: #888888;
+  --white: #FFFFFF;
+  --white-90: rgba(255,255,255,0.9);
+  --white-70: rgba(255,255,255,0.7);
+  --white-50: rgba(255,255,255,0.5);
+  --white-30: rgba(255,255,255,0.3);
+  --white-10: rgba(255,255,255,0.08);
+  --white-5: rgba(255,255,255,0.04);
+  --gold: #C9A84C;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+}
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; cursor: none; }
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════ */
+.cursor { position: fixed; width: 8px; height: 8px; background: var(--red); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .15s, height .15s, background .15s; }
+.cursor.hover { width: 20px; height: 20px; background: transparent; border: 1px solid var(--red); }
+/* ═══════════════════════════════════════════
+   OUTLINED SVG ICONS
+═══════════════════════════════════════════ */
+.nv-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--red);
+  width: 22px; height: 22px;
+}
+.nv-icon svg {
+  width: 100%; height: 100%;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.nv-icon.lg { width: 28px; height: 28px; }
+.nv-icon.xl { width: 34px; height: 34px; }
+
+
+/* ═══════════════════════════════════════════
+   SLIDESHOW WRAPPER
+═══════════════════════════════════════════ */
+#slideshow { position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #000; }
+
+/* ═══════════════════════════════════════════
+   INDIVIDUAL SLIDES
+═══════════════════════════════════════════ */
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 70px clamp(40px, 7vw, 110px) 70px clamp(40px, 7vw, 110px);
+  opacity: 0; pointer-events: none;
+  transform: translateX(80px);
+  transition: opacity 0.45s cubic-bezier(.4,0,.2,1), transform 0.45s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.slide.centered { align-items: center; text-align: center; }
+.slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.exit { opacity: 0; transform: translateX(-80px); transition: opacity 0.3s ease, transform 0.3s ease; }
+
+/* slide backgrounds */
+.bg-black { background: #000; }
+.bg-dark { background: #0D0D0D; }
+.bg-red { background: var(--red); }
+.bg-charcoal { background: var(--gray-1); }
+
+/* Grid overlay on some slides */
+.slide.grid-bg::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Diagonal red slash accent */
+.slash-accent {
+  position: absolute; top: 0; right: -20px; width: 6px; height: 100%;
+  background: var(--red); transform: skewX(-8deg); opacity: 0.7;
+}
+.slash-accent-2 {
+  position: absolute; top: 0; right: 20px; width: 2px; height: 100%;
+  background: var(--red); transform: skewX(-8deg); opacity: 0.3;
+}
+
+/* ═══════════════════════════════════════════
+   CORNER LOGO (persistent)
+═══════════════════════════════════════════ */
+#corner-logo {
+  position: fixed; top: 22px; left: 28px; z-index: 200;
+  display: flex; align-items: center; gap: 10px;
+  transition: opacity 0.3s;
+}
+#logo-img-corner {
+  height: 40px; width: auto; max-width: 180px; display: block;
+  object-fit: contain; object-position: left center;
+}
+#logo-placeholder-corner {
+  font-family: var(--font-display);
+  font-size: 28px; line-height: 1; color: var(--white); letter-spacing: 1px;
+}
+#logo-placeholder-corner span { color: var(--red); }
+.corner-divider { width: 1px; height: 22px; background: var(--white-30); }
+.corner-sub {
+  font-family: var(--font-condensed);
+  font-size: 10px; letter-spacing: 4px; color: var(--white-50);
+  text-transform: uppercase; font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════
+   UI CHROME (progress, dots, nav)
+═══════════════════════════════════════════ */
+#progress { position: fixed; bottom: 0; left: 0; height: 2px; background: var(--red); transition: width .5s ease; z-index: 300; }
+#slide-num { position: fixed; bottom: 12px; right: 20px; font-family: var(--font-condensed); font-size: 11px; color: var(--white-30); letter-spacing: 2px; z-index: 300; }
+#dots { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 300; }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--white-20, rgba(255,255,255,0.2)); cursor: pointer; transition: all .3s; }
+.dot.active { width: 16px; border-radius: 2px; background: var(--red); }
+.nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(204,0,0,0.3); background: rgba(204,0,0,0.08); color: var(--white-50); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 300; transition: all .2s; }
+.nav-btn:hover { background: var(--red); border-color: var(--red); color: var(--white); }
+#btn-prev { left: 10px; }
+#btn-next { right: 10px; }
+
+/* ═══════════════════════════════════════════
+   EDIT MODE TOOLBAR
+═══════════════════════════════════════════ */
+#edit-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(204,0,0,0.92); backdrop-filter: blur(12px);
+  height: 52px; display: none; align-items: center; gap: 16px; padding: 0 20px;
+  z-index: 500; border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+#edit-toolbar.visible { display: flex; }
+#edit-toolbar span { font-family: var(--font-condensed); font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.8); text-transform: uppercase; font-weight: 700; }
+.edit-btn {
+  padding: 6px 16px; font-family: var(--font-condensed); font-size: 12px; letter-spacing: 2px;
+  font-weight: 700; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4);
+  background: transparent; color: #fff; cursor: pointer; border-radius: 2px; transition: all .2s;
+}
+.edit-btn:hover { background: rgba(255,255,255,0.2); }
+.edit-btn.primary { background: rgba(255,255,255,0.9); color: var(--red); border-color: transparent; }
+#logo-upload-input { display: none; }
+[contenteditable="true"] {
+  outline: 2px dashed rgba(255,255,255,0.6) !important;
+  outline-offset: 4px;
+  border-radius: 2px;
+  min-width: 20px;
+  cursor: text !important;
+}
+
+/* ═══════════════════════════════════════════
+   EDIT TOGGLE BUTTON (always visible)
+═══════════════════════════════════════════ */
+#edit-toggle {
+  position: fixed; top: 22px; right: 20px; z-index: 400;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 14px; border-radius: 2px; cursor: pointer;
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 3px; color: var(--white-50);
+  text-transform: uppercase; font-weight: 700; transition: all .2s;
+}
+#edit-toggle:hover { background: rgba(204,0,0,0.15); border-color: rgba(204,0,0,0.4); color: var(--white); }
+#edit-toggle .dot-indicator { width: 6px; height: 6px; border-radius: 50%; background: var(--white-30); transition: background .2s; }
+#edit-toggle.active .dot-indicator { background: #44ff44; }
+#edit-toggle.active { border-color: rgba(204,0,0,0.6); color: var(--white); }
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY SYSTEM
+═══════════════════════════════════════════ */
+.slide-label {
+  font-family: var(--font-condensed); font-size: clamp(10px,1.2vw,12px);
+  letter-spacing: 5px; text-transform: uppercase; color: var(--red);
+  font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+}
+.slide-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--red); flex-shrink: 0; }
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(54px, 9.5vw, 128px);
+  line-height: 0.88; color: var(--white); text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 22px;
+}
+.slide-title .red { color: var(--red); }
+.slide-title .outline { -webkit-text-stroke: 2px var(--white); color: transparent; }
+.slide-title .outline-red { -webkit-text-stroke: 2px var(--red); color: transparent; }
+.slide-heading {
+  font-family: var(--font-display); font-size: clamp(32px, 5vw, 64px);
+  color: var(--white); letter-spacing: 2px; line-height: 1; margin-bottom: 20px;
+}
+.slide-heading .red { color: var(--red); }
+.slide-body {
+  font-family: var(--font-body); font-size: clamp(14px, 1.8vw, 17px);
+  color: var(--white-70); font-weight: 300; line-height: 1.7;
+  max-width: 620px;
+}
+.slide-body strong { color: var(--white); font-weight: 600; }
+.slide-body .red { color: var(--red); }
+
+/* ═══════════════════════════════════════════
+   RED DIVIDER LINE
+═══════════════════════════════════════════ */
+.red-rule { width: 48px; height: 3px; background: var(--red); margin-bottom: 22px; }
+.red-rule.wide { width: 120px; }
+.red-rule.center { margin-left: auto; margin-right: auto; }
+
+/* ═══════════════════════════════════════════
+   SECTION NUMBER STAMP
+═══════════════════════════════════════════ */
+.section-num {
+  font-family: var(--font-display); font-size: clamp(100px,18vw,220px);
+  color: rgba(204,0,0,0.07); position: absolute;
+  right: clamp(40px,7vw,100px); top: 50%; transform: translateY(-50%);
+  line-height: 1; pointer-events: none; user-select: none; letter-spacing: -5px;
+}
+
+/* ═══════════════════════════════════════════
+   PILL BADGE / TAG
+═══════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--red-glow); border: 1px solid rgba(204,0,0,0.35);
+  color: var(--red); font-family: var(--font-condensed);
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;
+  padding: 5px 14px; border-radius: 2px; margin-bottom: 16px;
+}
+
+/* ═══════════════════════════════════════════
+   PILLAR CARDS (Slide 3)
+═══════════════════════════════════════════ */
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; width: 100%; max-width: 900px;
+  margin-top: 10px;
+}
+.pillar-card {
+  background: var(--white-5); border: 1px solid var(--white-10);
+  border-top: 3px solid var(--red); padding: 28px 24px;
+  position: relative; overflow: hidden; transition: border-color .3s;
+}
+.pillar-card:hover { border-top-color: var(--red); background: rgba(204,0,0,0.06); }
+.pillar-num {
+  font-family: var(--font-display); font-size: 56px;
+  color: rgba(204,0,0,0.12); position: absolute; top: -8px; right: 12px;
+  line-height: 1;
+}
+.pillar-icon { font-size: 28px; margin-bottom: 14px; }
+.pillar-title {
+  font-family: var(--font-display); font-size: clamp(20px,2.5vw,28px);
+  color: var(--white); letter-spacing: 1px; margin-bottom: 10px; line-height: 1;
+}
+.pillar-sub {
+  font-family: var(--font-condensed); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--red); font-weight: 700; margin-bottom: 12px;
+}
+.pillar-desc {
+  font-family: var(--font-body); font-size: clamp(12px,1.4vw,14px);
+  color: var(--white-50); line-height: 1.6; font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   FOUNDER QUOTE CARD
+═══════════════════════════════════════════ */
+.quote-block {
+  border-left: 4px solid var(--red); padding: 16px 24px;
+  background: rgba(204,0,0,0.05); max-width: 640px;
+  margin: 16px 0;
+}
+.quote-block p {
+  font-family: var(--font-body); font-size: clamp(14px,1.8vw,18px);
+  color: var(--white-90); font-weight: 300; line-height: 1.6; font-style: italic;
+}
+.quote-block cite {
+  display: block; margin-top: 10px;
+  font-family: var(--font-condensed); font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red); font-weight: 700;
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════════
+   EXPECTATION GRID
+═══════════════════════════════════════════ */
+.expect-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px 28px; max-width: 720px; width: 100%;
+  margin-top: 8px;
+}
+.expect-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid var(--white-10);
+}
+.expect-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.expect-text h4 {
+  font-family: var(--font-condensed); font-size: clamp(14px,1.6vw,16px);
+  color: var(--white); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 3px;
+}
+.expect-text p {
+  font-family: var(--font-body); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white-50); font-weight: 300; line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   OPERATING SYSTEM VISUAL
+═══════════════════════════════════════════ */
+.os-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px; max-width: 820px; width: 100%; margin-top: 12px;
+}
+.os-card {
+  background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 18px 16px; border-radius: 1px;
+}
+.os-card .os-num {
+  font-family: var(--font-display); font-size: 36px; color: var(--red); line-height: 1;
+  margin-bottom: 6px;
+}
+.os-card .os-label {
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white-50); font-weight: 700; margin-bottom: 8px;
+}
+.os-card .os-desc {
+  font-family: var(--font-body); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white-70); line-height: 1.5; font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   CLIENT JOURNEY (flow diagram)
+═══════════════════════════════════════════ */
+.journey-flow {
+  display: flex; align-items: stretch; gap: 0;
+  width: 100%; max-width: 860px; margin-top: 16px;
+}
+.journey-step {
+  flex: 1; background: var(--white-5); border: 1px solid var(--white-10);
+  border-left: none; padding: 18px 14px; position: relative;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%, 18px 50%);
+  margin-left: -16px;
+}
+.journey-step:first-child { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); margin-left: 0; }
+.journey-step:last-child { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 18px 50%); }
+.journey-step:hover { background: rgba(204,0,0,0.08); }
+.journey-step-num {
+  font-family: var(--font-display); font-size: 28px; color: rgba(204,0,0,0.4); line-height: 1;
+}
+.journey-step-title {
+  font-family: var(--font-condensed); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white); font-weight: 700; letter-spacing: 1px; margin: 4px 0 6px;
+  text-transform: uppercase;
+}
+.journey-step-desc {
+  font-family: var(--font-body); font-size: clamp(10px,1.1vw,12px);
+  color: var(--white-50); line-height: 1.5; font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   SERVICE PACKAGES
+═══════════════════════════════════════════ */
+.pkg-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; max-width: 820px; width: 100%; margin-top: 12px;
+}
+.pkg-card {
+  background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 20px 18px; transition: all .3s;
+}
+.pkg-card:hover { background: rgba(204,0,0,0.07); border-color: rgba(204,0,0,0.3); }
+.pkg-icon { font-size: 24px; margin-bottom: 10px; }
+.pkg-title {
+  font-family: var(--font-condensed); font-size: clamp(15px,1.8vw,18px);
+  color: var(--white); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.pkg-desc {
+  font-family: var(--font-body); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white-50); line-height: 1.5; font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   REVENUE STREAMS VISUAL
+═══════════════════════════════════════════ */
+.revenue-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr); gap: 10px;
+  max-width: 780px; width: 100%; max-height: 330px; margin-top: 12px;
+}
+.rev-card {
+  background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 18px 16px; display: flex; flex-direction: column;
+  gap: 6px; transition: all .3s; position: relative; overflow: hidden;
+}
+.rev-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  height: 2px; background: var(--red);
+  width: 0; transition: width .4s ease;
+}
+.rev-card:hover::before { width: 100%; }
+.rev-card:hover { background: rgba(204,0,0,0.06); }
+.rev-label {
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 3px;
+  color: var(--red); text-transform: uppercase; font-weight: 700;
+}
+.rev-title {
+  font-family: var(--font-display); font-size: clamp(18px,2.2vw,24px);
+  color: var(--white); line-height: 1; letter-spacing: 1px;
+}
+.rev-desc {
+  font-family: var(--font-body); font-size: clamp(10px,1.1vw,12px);
+  color: var(--white-40, rgba(255,255,255,0.4)); line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   ECOSYSTEM DIAGRAM (hub+spoke SVG container)
+═══════════════════════════════════════════ */
+.ecosystem-wrap {
+  width: 100%; max-width: 800px; display: flex;
+  align-items: center; justify-content: center;
+  margin-top: 16px;
+}
+
+/* ═══════════════════════════════════════════
+   TIER CARDS
+═══════════════════════════════════════════ */
+.tier-wrap { display: flex; gap: 16px; width: 100%; max-width: 820px; margin-top: 12px; }
+.tier-card {
+  flex: 1; background: var(--white-5); border: 1px solid var(--white-10);
+  border-top: 3px solid; padding: 22px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.tier-card.partner { border-top-color: var(--white-30); }
+.tier-card.leadership { border-top-color: var(--red); }
+.tier-card.equity { border-top-color: var(--gold); }
+.tier-card .tier-icon { font-size: 26px; }
+.tier-card .tier-name {
+  font-family: var(--font-display); font-size: clamp(22px,2.8vw,30px);
+  color: var(--white); letter-spacing: 1px; line-height: 1;
+}
+.tier-card .tier-subtitle {
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white-50); font-weight: 700;
+}
+.tier-divider { width: 100%; height: 1px; background: var(--white-10); margin: 4px 0; }
+.tier-item {
+  font-family: var(--font-body); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white-70); line-height: 1.5; display: flex; gap: 8px;
+}
+.tier-item::before { content: '→'; color: var(--red); flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════
+   POINT SYSTEM VISUAL
+═══════════════════════════════════════════ */
+.point-flow {
+  display: flex; align-items: center; gap: 0;
+  width: 100%; max-width: 760px; margin-top: 16px;
+}
+.point-step {
+  flex: 1; background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 20px 14px; text-align: center; position: relative;
+}
+.point-arrow {
+  width: 32px; height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--red); font-size: 18px;
+}
+.point-step-icon { font-size: 28px; margin-bottom: 8px; }
+.point-step-title {
+  font-family: var(--font-condensed); font-size: clamp(13px,1.5vw,15px);
+  color: var(--white); font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;
+}
+.point-step-desc {
+  font-family: var(--font-body); font-size: clamp(10px,1.1vw,12px);
+  color: var(--white-50); line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   OWNERSHIP CHART
+═══════════════════════════════════════════ */
+.ownership-wrap { width: 100%; max-width: 700px; margin-top: 10px; }
+
+/* ═══════════════════════════════════════════
+   BULLET LIST (general)
+═══════════════════════════════════════════ */
+.nv-list { list-style: none; max-width: 640px; width: 100%; }
+.nv-list li {
+  font-family: var(--font-body); font-size: clamp(13px,1.6vw,16px);
+  color: var(--white-80, rgba(255,255,255,0.8)); padding: 10px 0;
+  border-bottom: 1px solid var(--white-10);
+  display: flex; align-items: flex-start; gap: 12px; line-height: 1.5;
+}
+.nv-list li:last-child { border-bottom: none; }
+.nv-list li .li-icon { color: var(--red); flex-shrink: 0; font-size: 14px; margin-top: 2px; }
+.nv-list li .li-body strong { color: var(--white); font-weight: 600; display: block; }
+.nv-list li .li-body span { color: var(--white-50); font-size: 0.85em; font-weight: 300; }
+
+/* ═══════════════════════════════════════════
+   SPV + INVESTMENT TABLES
+═══════════════════════════════════════════ */
+.invest-levels {
+  display: flex; flex-direction: column; gap: 8px;
+  max-width: 680px; width: 100%; margin-top: 12px;
+}
+.invest-row {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 14px 18px; position: relative; overflow: hidden;
+}
+.invest-row::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.invest-row.lvl1::after { background: rgba(255,255,255,0.2); }
+.invest-row.lvl2::after { background: var(--red); }
+.invest-row.lvl3::after { background: var(--gold); }
+.invest-row.lvl4::after { background: #44ff99; }
+.invest-level-name {
+  font-family: var(--font-condensed); font-size: clamp(14px,1.6vw,17px);
+  color: var(--white); font-weight: 700; letter-spacing: 0.5px; width: 200px; flex-shrink: 0;
+}
+.invest-level-detail {
+  font-family: var(--font-body); font-size: clamp(11px,1.2vw,13px);
+  color: var(--white-60, rgba(255,255,255,0.6)); line-height: 1.4;
+}
+.invest-level-badge {
+  margin-left: auto; flex-shrink: 0;
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 700;
+  padding: 4px 12px; border: 1px solid; border-radius: 1px;
+}
+.lvl1 .invest-level-badge { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.2); }
+.lvl2 .invest-level-badge { color: var(--red); border-color: rgba(204,0,0,0.4); }
+.lvl3 .invest-level-badge { color: var(--gold); border-color: rgba(201,168,76,0.4); }
+.lvl4 .invest-level-badge { color: #44ff99; border-color: rgba(68,255,153,0.3); }
+
+/* ═══════════════════════════════════════════
+   STUDIO VISION GRID
+═══════════════════════════════════════════ */
+.studio-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  grid-template-rows: auto auto; gap: 10px;
+  max-width: 760px; width: 100%; margin-top: 12px;
+}
+.studio-space {
+  background: var(--white-5); border: 1px solid var(--white-10);
+  padding: 18px 16px; transition: all .3s;
+}
+.studio-space:first-child {
+  grid-column: span 2; background: rgba(204,0,0,0.08);
+  border-color: rgba(204,0,0,0.3);
+}
+.studio-space:hover { background: rgba(204,0,0,0.07); }
+.studio-space-icon { font-size: 22px; margin-bottom: 8px; }
+.studio-space-title {
+  font-family: var(--font-condensed); font-size: clamp(14px,1.6vw,17px);
+  color: var(--white); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.studio-space-desc {
+  font-family: var(--font-body); font-size: clamp(10px,1.1vw,12px);
+  color: var(--white-50); line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   BIG STAT BLOCKS
+═══════════════════════════════════════════ */
+.stat-row { display: flex; gap: 24px; margin-top: 16px; }
+.stat-block { text-align: center; }
+.stat-num {
+  font-family: var(--font-display); font-size: clamp(52px,8vw,90px);
+  color: var(--red); line-height: 1; letter-spacing: -1px;
+}
+.stat-label {
+  font-family: var(--font-condensed); font-size: 10px; letter-spacing: 3px;
+  color: var(--white-50); text-transform: uppercase; font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════
+   CLOSING SLIDE
+═══════════════════════════════════════════ */
+.close-big {
+  font-family: var(--font-display);
+  font-size: clamp(72px,14vw,180px);
+  line-height: 0.85; color: var(--white); text-transform: uppercase;
+  letter-spacing: 3px; text-align: center;
+}
+.close-big .block-red { display: block; color: var(--red); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .slide { padding: 64px 20px 50px; }
+  .pillars-grid, .pkg-grid, .os-grid, .revenue-grid, .studio-grid { grid-template-columns: 1fr 1fr; }
+  .tier-wrap { flex-direction: column; }
+  .journey-flow { flex-direction: column; gap: 8px; }
+  .journey-step { clip-path: none !important; margin-left: 0 !important; border-left: 1px solid var(--white-10); }
+  .point-flow { flex-direction: column; }
+  .point-arrow { transform: rotate(90deg); }
+  .nav-btn { display: none; }
+  .section-num { font-size: 100px; right: 10px; opacity: 0.5; }
+  .expect-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 500px) {
+  .pillars-grid, .pkg-grid, .os-grid, .revenue-grid, .studio-grid { grid-template-columns: 1fr; }
+  .studio-space:first-child { grid-column: span 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── CURSOR ─── -->
+<div class="cursor" id="cursor"></div>
+
+<!-- ─── CORNER LOGO ─── -->
+<div id="corner-logo">
+  <img id="logo-img-corner" src="" alt="Next Vision" style="display:none;">
+  <div id="logo-placeholder-corner">N<span>V</span></div>
+  <div class="corner-divider"></div>
+  <div class="corner-sub">Next Vision</div>
+</div>
+
+<!-- ─── EDIT TOGGLE ─── -->
+<div id="edit-toggle" onclick="toggleEdit()">
+  <div class="dot-indicator"></div>
+  EDIT MODE
+</div>
+
+<!-- ─── EDIT TOOLBAR ─── -->
+<div id="edit-toolbar">
+  <span>EDIT MODE ACTIVE — Click any highlighted field to edit</span>
+  <button class="edit-btn" onclick="document.getElementById('logo-upload-input').click()">Upload Logo</button>
+  <input type="file" id="logo-upload-input" accept="image/*" onchange="handleLogoUpload(event)">
+  <button class="edit-btn" onclick="toggleEdit()">Done Editing</button>
+  <button class="edit-btn primary" onclick="window.print()">Print Slide</button>
+</div>
+
+<!-- ─── UI CHROME ─── -->
+<div id="progress"></div>
+<div id="slide-num"></div>
+<div id="dots"></div>
+<button class="nav-btn" id="btn-prev">&#8592;</button>
+<button class="nav-btn" id="btn-next">&#8594;</button>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDES
+════════════════════════════════════════════════════════════ -->
+<div id="slideshow">
+
+<!-- ═══ 1. COVER ═══ -->
+<div class="slide bg-black centered grid-bg active" data-index="0">
+  <div class="slash-accent"></div>
+  <div class="slash-accent-2"></div>
+  <div style="text-align:center; z-index:1;">
+    <div class="slide-label" style="justify-content:center; margin-bottom:20px;">Team Development Presentation · 2025</div>
+    <div class="slide-title" style="font-size:clamp(70px,13vw,160px); margin-bottom:10px;">
+      THE<br><span class="red">BLUE</span><span class="outline">PRINT</span>
+    </div>
+    <div class="red-rule wide center"></div>
+    <div class="slide-body" style="text-align:center; margin:0 auto 28px;">
+      How Next Vision operates, who we serve, how you get paid,<br>
+      and what we're building together.
+    </div>
+    <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
+      <div style="font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:var(--white-50); text-transform:uppercase;">
+        <span style="color:var(--red);">◈</span> &nbsp;nextvisiontulsa.com
+      </div>
+      <div style="font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:var(--white-50); text-transform:uppercase;">
+        <span style="color:var(--red);">◈</span> &nbsp;Tulsa, Oklahoma
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 2. WHO IS NV ═══ -->
+<div class="slide bg-dark" data-index="1">
+  <div class="section-num">01</div>
+  <div class="slide-label">Who We Are</div>
+  <div class="slide-title">NEXT <span class="red">VISION</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="max-width:580px; margin-bottom:24px;">
+    We are a <strong>creative strategy agency, collective, and media brand</strong> rooted in Tulsa, Oklahoma. We don't just do creative work — we build the infrastructure that creative economies need to sustain themselves.
+  </div>
+  <div class="quote-block">
+    <p class="editable-field">We exist to tell the stories that need to be told, build the brands that deserve to be seen, and create an ecosystem where creative people can earn, grow, and own something.</p>
+    <cite>Next Vision Mission</cite>
+  </div>
+  <div style="margin-top:20px; display:flex; gap:20px; flex-wrap:wrap;">
+    <div class="badge">Founded in Tulsa</div>
+    <div class="badge">Creative Agency</div>
+    <div class="badge">Cultural Bridge</div>
+    <div class="badge">Media Brand</div>
+  </div>
+</div>
+
+<!-- ═══ 3. THREE PILLARS ═══ -->
+<div class="slide bg-black" data-index="2">
+  <div class="section-num">02</div>
+  <div class="slide-label">Our Foundation</div>
+  <div class="slide-heading">Three <span class="red">Pillars</span></div>
+  <div class="red-rule"></div>
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-num">01</div>
+      <div class="pillar-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span></div>
+      <div class="pillar-sub">Revenue Engine</div>
+      <div class="pillar-title">Creative Agency</div>
+      <div class="pillar-desc">Branding, marketing, video production, and storytelling services for clients in Tulsa and beyond. This is our primary revenue source.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">02</div>
+      <div class="pillar-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h4M2 14h4M18 9h4M18 14h4"/></svg></span></div>
+      <div class="pillar-sub">Community Engine</div>
+      <div class="pillar-title">Tulsa Film Tribe</div>
+      <div class="pillar-desc">A collective connecting filmmakers, designers, musicians, photographers, and creators. Our people pipeline and cultural community.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">03</div>
+      <div class="pillar-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><path d="M5.5 5.5a9 9 0 0 0 0 13M18.5 5.5a9 9 0 0 1 0 13"/></svg></span></div>
+      <div class="pillar-sub">Brand Engine</div>
+      <div class="pillar-title">NV Media Brand</div>
+      <div class="pillar-desc">Cultural storytelling through podcasts, documentaries, and digital content. Our platform that builds authority and attracts sponsorship.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4. CULTURAL MISSION ═══ -->
+<div class="slide bg-charcoal" data-index="3">
+  <div class="section-num">03</div>
+  <div class="slide-label">Why We Exist</div>
+  <div class="slide-heading">The Cultural <span class="red">Mission</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:20px;">
+    Next Vision was built to be a <strong class="red">cultural bridge</strong>. We operate at the intersection of communities that have historically been underserved by the creative industry.
+  </div>
+  <ul class="nv-list" style="max-width:580px;">
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>African &amp; Native Communities</strong><span>Connecting through storytelling, production, and shared ownership models</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Tulsa as the Epicenter</strong><span>A city with one of the richest untold creative histories in America</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Multi-City Studio Network</strong><span>Long-term vision: NV studios in multiple cities, internationally connected</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Economic Ownership</strong><span>Creativity isn't charity — it's commerce. We build models that pay creators fairly</span></div></li>
+  </ul>
+</div>
+
+<!-- ═══ 5. THE FOUNDER ═══ -->
+<div class="slide bg-black" data-index="4">
+  <div class="section-num">04</div>
+  <div class="slide-label">The Founder</div>
+  <div style="margin-bottom:6px;">
+    <div class="badge">CEO &amp; Founder · Next Vision LLC</div>
+  </div>
+  <div class="slide-title" style="font-size:clamp(46px,8vw,100px); margin-bottom:4px;">
+    <span class="editable-field">PAUL SAID</span><br>
+    <span class="red outline" style="-webkit-text-stroke:2px var(--red);">(POLITO)</span>
+  </div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:20px; max-width:560px;">
+    Creative strategist, builder, and connector. Polito founded Next Vision from a simple conviction: <strong>Tulsa has world-class creative talent that deserves a world-class platform.</strong>
+  </div>
+  <div class="quote-block" style="max-width:560px;">
+    <p class="editable-field">I feel most alive when I'm creating, solving problems, connecting with people, and building systems. That's what Next Vision is — it's all of those things at once.</p>
+    <cite class="editable-field">Paul Said · POLITO · CEO &amp; Founder</cite>
+  </div>
+</div>
+
+<!-- ═══ 6. FOUNDER'S GOAL ═══ -->
+<div class="slide bg-dark" data-index="5">
+  <div class="section-num">05</div>
+  <div class="slide-label">The Vision</div>
+  <div class="slide-heading">My Goal as <span class="red">Founder &amp; CEO</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:20px; max-width:600px;">
+    This isn't a passion project. It's a <strong>business built to generate real wealth</strong> — for my family, for this team, and for the communities we serve.
+  </div>
+  <div class="expect-grid" style="max-width:760px;">
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Build a Million Dollar Company</h4>
+        <p>Exit the rat race — not just for me, but for every person in this room who shows up and earns it</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M3 21h18M9 21V7l3-4 3 4v14M3 21V11l6-4M21 21V11l-6-4"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Create Generational Infrastructure</h4>
+        <p>A studio, a brand, a collective — assets that outlast any single project</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Build a National Creative Model</h4>
+        <p>Tulsa Film Tribe as a blueprint that other cities replicate. Our story becomes the template</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Create Ownership for This Team</h4>
+        <p>Leadership roles have a co-ownership path. If you build it with me, you can own a piece of it</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 7. WHAT TO EXPECT FROM ME ═══ -->
+<div class="slide bg-black" data-index="6">
+  <div class="section-num">06</div>
+  <div class="slide-label">My Commitment</div>
+  <div class="slide-heading">What You Can <span class="red">Expect From Me</span></div>
+  <div class="red-rule"></div>
+  <div class="expect-grid">
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Full Transparency</h4>
+        <p>You will always know where the company stands — revenue, projects, direction</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>A System That Works</h4>
+        <p>Your contributions are tracked, documented, and rewarded. Nothing gets lost</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M8.5 14.5A4.5 4.5 0 0 0 12 19a4.5 4.5 0 0 0 4.5-4.5c0-1.899-1.168-3.222-2.25-4.5S12 7.5 12 6a6 6 0 0 0-6 6c0 1.657.672 3.157 1.757 4.243"/><path d="M12 6c0 2.5 2 4 2 6.5a2 2 0 1 1-4 0C10 10 12 8.5 12 6z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>I Will Create Alongside You</h4>
+        <p>I'm not behind a desk. I'm in the field building, producing, and connecting</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Honest, Direct Communication</h4>
+        <p>Even when it's uncomfortable. No politics, no guessing — just clarity</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Your Growth is My Investment</h4>
+        <p>I will push you toward your best work and open doors that advance your craft</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 22h14"/><path d="M5 7H3a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h2"/><path d="M19 7h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2"/><path d="M5 3h14a2 2 0 0 1 2 2v7a7 7 0 0 1-7 7 7 7 0 0 1-7-7V5a2 2 0 0 1 2-2z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Opportunity to Own Something</h4>
+        <p>This isn't a job. If you earn it, you can own part of what we're building</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 8. WHAT I EXPECT FROM YOU ═══ -->
+<div class="slide bg-charcoal" data-index="7">
+  <div class="section-num">07</div>
+  <div class="slide-label">The Standard</div>
+  <div class="slide-heading">What I <span class="red">Expect</span> From You</div>
+  <div class="red-rule"></div>
+  <div class="expect-grid">
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Show Up With Intention</h4>
+        <p>Every meeting, project, and deliverable gets your full attention — not just presence</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M2 20h20M4 20l2-12 6 4 6-4 2 12"/><path d="M12 8m-1 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Own Your Role Completely</h4>
+        <p>You are the authority in your domain. Act like it. No waiting to be told everything</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M3 11l19-9v18L3 13v-2z"/><path d="M11 11.9v4.1M3 13l-1 3.5"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Communicate Proactively</h4>
+        <p>If there's a problem, say it early. Silence is never the answer in this organization</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Protect the Brand</h4>
+        <p>You represent Next Vision everywhere. Your work, your conduct, your image — you ARE the brand</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Think Like a Builder</h4>
+        <p>Not just executing tasks — always asking how we make this better, bigger, and more sustainable</p>
+      </div>
+    </div>
+    <div class="expect-item">
+      <div class="expect-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span></div>
+      <div class="expect-text">
+        <h4>Bring Your Network</h4>
+        <p>Clients, creatives, partners — your relationships are assets. Share them with the team</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 9. NV OPERATING SYSTEM ═══ -->
+<div class="slide bg-black" data-index="8">
+  <div class="section-num">08</div>
+  <div class="slide-label">How We Operate</div>
+  <div class="slide-heading">The NV <span class="red">Operating System</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:16px;">
+    Next Vision runs on a structured operating system. Every day, week, and month has a defined rhythm so the team stays aligned and revenue stays consistent.
+  </div>
+  <div class="os-grid">
+    <div class="os-card">
+      <div class="os-num">28</div>
+      <div class="os-label">Day Cycle</div>
+      <div class="os-desc">Every month operates on a 28-day rhythm with four structured weeks and a close protocol</div>
+    </div>
+    <div class="os-card">
+      <div class="os-num">13</div>
+      <div class="os-label">Month Calendar</div>
+      <div class="os-desc">13 named months in our operating year — each with a defined focus and milestone</div>
+    </div>
+    <div class="os-card">
+      <div class="os-num">D28</div>
+      <div class="os-label">Close Protocol</div>
+      <div class="os-desc">Day 28 of every cycle: review, pay out points, assess pipeline, and plan the next cycle</div>
+    </div>
+    <div class="os-card">
+      <div class="os-num">∞</div>
+      <div class="os-label">Notion Hub</div>
+      <div class="os-desc">Our central command: SOPs, calendars, projects, communication — everything lives here</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 10. CLIENT JOURNEY ═══ -->
+<div class="slide bg-dark" data-index="9">
+  <div class="section-num">09</div>
+  <div class="slide-label">Client Experience</div>
+  <div class="slide-heading">How We <span class="red">Serve Clients</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:14px;">
+    Every client moves through a defined process. This ensures consistent quality, clear communication, and satisfied clients who come back and refer others.
+  </div>
+  <div class="journey-flow">
+    <div class="journey-step">
+      <div class="journey-step-num">01</div>
+      <div class="journey-step-title">Discovery</div>
+      <div class="journey-step-desc">Deep dive into client's world, goals, and audience</div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-step-num">02</div>
+      <div class="journey-step-title">Strategy</div>
+      <div class="journey-step-desc">Build the creative roadmap, scope, and timeline</div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-step-num">03</div>
+      <div class="journey-step-title">Production</div>
+      <div class="journey-step-desc">Execute with craft — video, photo, design, content</div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-step-num">04</div>
+      <div class="journey-step-title">Delivery</div>
+      <div class="journey-step-desc">Present, revise, and hand off final assets</div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-step-num">05</div>
+      <div class="journey-step-title">Retention</div>
+      <div class="journey-step-desc">Convert to retainer — ongoing monthly partnership</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 11. SERVICE PACKAGES ═══ -->
+<div class="slide bg-black" data-index="10">
+  <div class="section-num">10</div>
+  <div class="slide-label">What We Sell</div>
+  <div class="slide-heading">Our <span class="red">Services</span></div>
+  <div class="red-rule"></div>
+  <div class="pkg-grid">
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span></div>
+      <div class="pkg-title">Brand Identity</div>
+      <div class="pkg-desc">Logo systems, visual identity, brand guides, and strategy for businesses ready to stand out</div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h4M2 14h4M18 9h4M18 14h4"/></svg></span></div>
+      <div class="pkg-title">Video Production</div>
+      <div class="pkg-desc">Commercials, brand films, testimonials, event coverage, and documentary-style content</div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span></div>
+      <div class="pkg-title">Photography</div>
+      <div class="pkg-desc">Commercial, portrait, product, and event photography with professional post-production</div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span></div>
+      <div class="pkg-title">Content &amp; Social</div>
+      <div class="pkg-desc">Ongoing content creation, social media management, and digital storytelling packages</div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span></div>
+      <div class="pkg-title">Podcast Production</div>
+      <div class="pkg-desc">Full-service podcast: recording, editing, distribution, and guest coordination</div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span></div>
+      <div class="pkg-title">Retainer Programs</div>
+      <div class="pkg-desc">Monthly recurring partnerships — our most predictable revenue and strongest client relationships</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 12. SPONSORSHIP MODEL ═══ -->
+<div class="slide bg-charcoal" data-index="11">
+  <div class="section-num">11</div>
+  <div class="slide-label">Revenue Track 2</div>
+  <div class="slide-heading">Sponsorship <span class="red">Model</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:16px;">
+    Beyond client work, Next Vision attracts sponsors who want access to our audience, our cultural credibility, and the Tulsa Film Tribe community.
+  </div>
+  <ul class="nv-list" style="max-width:640px;">
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Content Sponsorships</strong><span>Brands pay to sponsor our podcast episodes, YouTube content, and social series</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Event Sponsors</strong><span>Corporate partners fund Tulsa Film Tribe gatherings, screenings, and workshops</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Community Partners</strong><span>Organizations aligned with our cultural mission become named partners with platform visibility</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>Production Partners</strong><span>Companies co-fund documentary and media projects in exchange for branding and first-look rights</span></div></li>
+    <li><span class="li-icon">▸</span><div class="li-body"><strong>What Sponsors Get</strong><span>Audience access, cultural credibility, logo placement, content integration, and community goodwill</span></div></li>
+  </ul>
+</div>
+
+<!-- ═══ 13. REVENUE STREAMS ═══ -->
+<div class="slide bg-black" data-index="12">
+  <div class="section-num">12</div>
+  <div class="slide-label">The Money Map</div>
+  <div class="slide-heading">Revenue <span class="red">Streams</span></div>
+  <div class="red-rule"></div>
+  <div class="revenue-grid">
+    <div class="rev-card">
+      <div class="rev-label">Stream 01</div>
+      <div class="rev-title">Agency Projects</div>
+      <div class="rev-desc">One-time client engagements — branding, video, photo, campaigns</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-label">Stream 02</div>
+      <div class="rev-title">Retainer Clients</div>
+      <div class="rev-desc">Monthly recurring revenue — our most stable income source</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-label">Stream 03</div>
+      <div class="rev-title">Collective Memberships</div>
+      <div class="rev-desc">Tulsa Film Tribe membership tiers — community supported revenue</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-label">Stream 04</div>
+      <div class="rev-title">Sponsorships</div>
+      <div class="rev-desc">Content, event, and production sponsorship deals</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-label">Stream 05</div>
+      <div class="rev-title">Licensing &amp; IP</div>
+      <div class="rev-desc">Content licensing, music rights, and intellectual property revenue</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-label">Stream 06</div>
+      <div class="rev-title">Events</div>
+      <div class="rev-desc">Tickets, workshops, screenings, and brand experiences</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 14. ECOSYSTEM DIAGRAM ═══ -->
+<div class="slide bg-dark" data-index="13">
+  <div class="section-num">13</div>
+  <div class="slide-label">The Big Picture</div>
+  <div class="slide-heading">The NV <span class="red">Ecosystem</span></div>
+  <div class="red-rule"></div>
+  <div class="ecosystem-wrap" style="width:100%; max-width:780px; margin-top:10px;">
+    <svg viewBox="0 0 780 400" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; overflow:visible;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill="rgba(204,0,0,0.6)"/>
+        </marker>
+      </defs>
+      <!-- Center Hub -->
+      <circle cx="390" cy="200" r="62" fill="rgba(204,0,0,0.15)" stroke="#CC0000" stroke-width="1.5"/>
+      <text x="390" y="193" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="22" fill="#fff" letter-spacing="2">NEXT</text>
+      <text x="390" y="216" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="22" fill="#CC0000" letter-spacing="2">VISION</text>
+      <!-- Spokes -->
+      <line x1="390" y1="138" x2="390" y2="85" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <line x1="448" y1="160" x2="510" y2="118" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <line x1="450" y1="220" x2="520" y2="250" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <line x1="390" y1="262" x2="390" y2="315" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <line x1="330" y1="220" x2="260" y2="250" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <line x1="332" y1="160" x2="270" y2="118" stroke="rgba(204,0,0,0.4)" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+      <!-- Nodes -->
+      <!-- Clients - Top -->
+      <rect x="320" y="38" width="140" height="46" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="390" y="57" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="3">REVENUE SOURCE</text>
+      <text x="390" y="75" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#fff" letter-spacing="1">CLIENTS</text>
+      <!-- Sponsors - TR -->
+      <rect x="518" y="92" width="140" height="46" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="588" y="111" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="3">REVENUE SOURCE</text>
+      <text x="588" y="129" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#fff" letter-spacing="1">SPONSORS</text>
+      <!-- Investors - BR -->
+      <rect x="530" y="234" width="140" height="46" rx="2" fill="rgba(201,168,76,0.08)" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+      <text x="600" y="253" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(201,168,76,0.6)" letter-spacing="3">CAPITAL SOURCE</text>
+      <text x="600" y="271" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#C9A84C" letter-spacing="1">INVESTORS</text>
+      <!-- Film Tribe - Bottom -->
+      <rect x="300" y="318" width="180" height="46" rx="2" fill="rgba(204,0,0,0.08)" stroke="rgba(204,0,0,0.3)" stroke-width="1"/>
+      <text x="390" y="337" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(204,0,0,0.7)" letter-spacing="3">COMMUNITY</text>
+      <text x="390" y="355" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#CC0000" letter-spacing="1">TULSA FILM TRIBE</text>
+      <!-- Partners - BL -->
+      <rect x="110" y="234" width="140" height="46" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="180" y="253" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="3">TALENT SOURCE</text>
+      <text x="180" y="271" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#fff" letter-spacing="1">CONTRACTORS</text>
+      <!-- Cofounders - TL -->
+      <rect x="122" y="92" width="140" height="46" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="192" y="111" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="3">GROWTH SOURCE</text>
+      <text x="192" y="129" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="17" fill="#fff" letter-spacing="1">CO-FOUNDERS</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══ 15. PARTNER TIER ═══ -->
+<div class="slide bg-black" data-index="14">
+  <div class="section-num">14</div>
+  <div class="slide-label">Partnership Tier 01</div>
+  <div class="slide-heading">Partner Tier — <span class="red">Tulsa Film Tribe</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:28px; max-width:820px; width:100%; flex-wrap:wrap;">
+    <div style="flex:1; min-width:260px;">
+      <div class="slide-body" style="margin-bottom:16px;">
+        The entry point into the NV ecosystem. Tulsa Film Tribe members are our creative workforce — skilled contractors who earn through the point system and build toward leadership.
+      </div>
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Who Qualifies</strong><span>Filmmakers, designers, photographers, musicians, editors, and creators</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Agreement Type</strong><span>Partner Agreement — point-based compensation, project-by-project</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>How You Earn</strong><span>Points assigned per deliverable, convert to cash when revenue comes in</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Path Forward</strong><span>Demonstrated performance unlocks leadership tier consideration</span></div></li>
+      </ul>
+    </div>
+    <div style="flex:0 0 260px;">
+      <div style="background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(255,255,255,0.3); padding:22px 20px;">
+        <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--white-50); margin-bottom:8px;">WHAT YOU GET</div>
+        <ul style="list-style:none;">
+          <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span class="nv-icon" style="width:16px;height:16px;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Access to NV projects &amp; clients</li>
+          <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span class="nv-icon" style="width:16px;height:16px;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Point accumulation per project</li>
+          <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span class="nv-icon" style="width:16px;height:16px;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Collective community &amp; resources</li>
+          <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span class="nv-icon" style="width:16px;height:16px;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Portfolio development</li>
+          <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:8px 0; display:flex; gap:8px;"><span class="nv-icon" style="width:16px;height:16px;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span> Path to leadership tier</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 16. LEADERSHIP TIER ═══ -->
+<div class="slide bg-charcoal" data-index="15">
+  <div class="section-num">15</div>
+  <div class="slide-label">Partnership Tier 02</div>
+  <div class="slide-heading">Leadership <span class="red">Tier</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:20px; max-width:860px; width:100%; flex-wrap:wrap;">
+    <div style="flex:1; min-width:280px;">
+      <div class="slide-body" style="margin-bottom:14px;">
+        Elevated trust. Elevated compensation. Leadership tier members hold authority, carry NDA responsibilities, and have a documented <strong>co-ownership path</strong>.
+      </div>
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>NDA + Confidentiality</strong><span>Required — you're inside the company's strategic decisions</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Premium Point Multiplier</strong><span>Leadership earns points at a higher rate per contribution</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Co-Ownership Path</strong><span>Performance milestones unlock actual equity stake in Next Vision</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Authority Scope</strong><span>Defined decision-making power within your role — you lead, not just execute</span></div></li>
+      </ul>
+    </div>
+    <div style="flex:0 0 280px; display:flex; flex-direction:column; gap:8px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:4px;">LEADERSHIP ROLES</div>
+      <div class="editable-field" style="background:rgba(204,0,0,0.08); border:1px solid rgba(204,0,0,0.2); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white); font-weight:700; letter-spacing:0.5px;">Director of Photography</div>
+      <div class="editable-field" style="background:var(--white-5); border:1px solid var(--white-10); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); font-weight:700; letter-spacing:0.5px;">Director of Human Affairs</div>
+      <div class="editable-field" style="background:var(--white-5); border:1px solid var(--white-10); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); font-weight:700; letter-spacing:0.5px;">VP of Culture &amp; Inclusivity</div>
+      <div class="editable-field" style="background:var(--white-5); border:1px solid var(--white-10); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); font-weight:700; letter-spacing:0.5px;">VP of Women Programs</div>
+      <div class="editable-field" style="background:var(--white-5); border:1px solid var(--white-10); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); font-weight:700; letter-spacing:0.5px;">Director of Operations</div>
+      <div class="editable-field" style="background:var(--white-5); border:1px solid var(--white-10); padding:10px 14px; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); font-weight:700; letter-spacing:0.5px;">Director of Recruiting</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 17. POINT SYSTEM ═══ -->
+<div class="slide bg-black" data-index="16">
+  <div class="section-num">16</div>
+  <div class="slide-label">Compensation Model</div>
+  <div class="slide-heading">The <span class="red">Point System</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:18px;">
+    Every contribution earns points. Points are not bonus — they are your <strong>tracked value</strong> inside the organization. As revenue comes in, points convert to cash. This aligns everyone's incentive with the company's success.
+  </div>
+  <div class="point-flow">
+    <div class="point-step">
+      <div class="point-step-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span></div>
+      <div class="point-step-title">Work Completed</div>
+      <div class="point-step-desc">You contribute to a project or deliverable</div>
+    </div>
+    <div class="point-arrow">▶</div>
+    <div class="point-step">
+      <div class="point-step-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span></div>
+      <div class="point-step-title">Points Awarded</div>
+      <div class="point-step-desc">Points logged per scope, complexity, and tier</div>
+    </div>
+    <div class="point-arrow">▶</div>
+    <div class="point-step">
+      <div class="point-step-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/><line x1="1" y1="14" x2="23" y2="14"/></svg></span></div>
+      <div class="point-step-title">Revenue Received</div>
+      <div class="point-step-desc">Client pays — revenue enters the company</div>
+    </div>
+    <div class="point-arrow">▶</div>
+    <div class="point-step">
+      <div class="point-step-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7 12 2"/></svg></span></div>
+      <div class="point-step-title">Cash Distributed</div>
+      <div class="point-step-desc">Points convert proportionally on Day 28 close</div>
+    </div>
+  </div>
+  <div style="margin-top:16px; display:flex; gap:16px; flex-wrap:wrap;">
+    <div class="badge">Partner Rate: Base Points</div>
+    <div class="badge">Leadership Rate: Premium Multiplier</div>
+    <div class="badge">Day 28 Close Protocol</div>
+  </div>
+</div>
+
+<!-- ═══ 18. HOW POINTS = CASH ═══ -->
+<div class="slide bg-dark" data-index="17">
+  <div class="section-num">17</div>
+  <div class="slide-label">Making It Real</div>
+  <div class="slide-heading">Points → <span class="red">Real Money</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:24px; max-width:820px; width:100%; flex-wrap:wrap; margin-top:8px;">
+    <div style="flex:1; min-width:280px;">
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Points Track Everything</strong><span>Every deliverable has a point value — nothing goes uncompensated</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>No Revenue = Points Accumulate</strong><span>In the ramp-up phase, points accrue and pay out as cash flow grows</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Per-Project Redemption</strong><span>Points are redeemable on a per-project basis — not pooled company-wide</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Leadership Gets More</strong><span>Leadership multiplier means your hour is worth more in points than a partner hour</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Transparent Ledger</strong><span>Every team member can see their point balance and what it represents in cash value</span></div></li>
+      </ul>
+    </div>
+    <div style="flex:0 0 280px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid var(--red); padding:24px 22px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:14px;">EXAMPLE BREAKDOWN</div>
+      <div style="font-family:var(--font-body); font-size:13px; color:var(--white-50); margin-bottom:16px; line-height:1.5;">$5,000 project · 3 contributors</div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10);">
+        <span>Director (1.5x)</span><span style="color:var(--white);">150 pts → $1,875</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10);">
+        <span>Partner A (1x)</span><span style="color:var(--white);">100 pts → $1,250</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--font-condensed); font-size:13px; color:var(--white-70); padding:8px 0; border-bottom:1px solid var(--white-10);">
+        <span>Partner B (1x)</span><span style="color:var(--white);">100 pts → $1,250</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--font-condensed); font-size:13px; color:var(--white-50); padding:8px 0;">
+        <span>NV Operating</span><span>→ $625</span>
+      </div>
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:2px; color:var(--white-30); margin-top:10px;">*Illustrative example. Actual splits per agreement.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 19. INVESTMENT TIERS ═══ -->
+<div class="slide bg-black" data-index="18">
+  <div class="section-num">18</div>
+  <div class="slide-label">Capital + Ownership</div>
+  <div class="slide-heading">Investment <span class="red">Tiers</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:16px;">
+    Next Vision has a structured pathway for people to invest in and own part of what we're building — from community supporters to full equity stakeholders.
+  </div>
+  <div class="invest-levels">
+    <div class="invest-row lvl1">
+      <div class="invest-level-name">Community Supporter</div>
+      <div class="invest-level-detail">Monthly supporter via Patreon-style platform — early access, credits, behind-the-scenes, event priority</div>
+      <div class="invest-level-badge">Access Tier</div>
+    </div>
+    <div class="invest-row lvl2">
+      <div class="invest-level-name">Project Partner</div>
+      <div class="invest-level-detail">Invest in a specific production or project — receive revenue share from that project's earnings via SPV</div>
+      <div class="invest-level-badge">Project Equity</div>
+    </div>
+    <div class="invest-row lvl3">
+      <div class="invest-level-name">Equity Investor</div>
+      <div class="invest-level-detail">Ownership stake in Next Vision LLC via Regulation CF (Wefunder) — company-level equity with growth upside</div>
+      <div class="invest-level-badge">Company Equity</div>
+    </div>
+    <div class="invest-row lvl4">
+      <div class="invest-level-name">Leadership Co-Ownership</div>
+      <div class="invest-level-detail">Performance-based equity path for leadership tier — written into agreement, earned through milestones</div>
+      <div class="invest-level-badge">Earned Equity</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 20. OWNERSHIP STRUCTURE ═══ -->
+<div class="slide bg-charcoal" data-index="19">
+  <div class="section-num">19</div>
+  <div class="slide-label">Who Owns What</div>
+  <div class="slide-heading">Ownership <span class="red">Structure</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:24px; max-width:820px; width:100%; flex-wrap:wrap; margin-top:6px;">
+    <div style="flex:1; min-width:280px;">
+      <!-- Ownership org chart SVG -->
+      <svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:420px; height:auto;">
+        <!-- NV LLC box -->
+        <rect x="110" y="10" width="200" height="58" rx="2" fill="rgba(204,0,0,0.12)" stroke="#CC0000" stroke-width="1.5"/>
+        <text x="210" y="33" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" letter-spacing="3">LEGAL ENTITY</text>
+        <text x="210" y="55" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="18" fill="#fff" letter-spacing="1">Next Vision LLC</text>
+        <!-- Line down -->
+        <line x1="210" y1="68" x2="210" y2="100" stroke="rgba(204,0,0,0.5)" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Horizontal split -->
+        <line x1="100" y1="100" x2="320" y2="100" stroke="rgba(204,0,0,0.3)" stroke-width="1"/>
+        <!-- Left: Paul -->
+        <line x1="130" y1="100" x2="130" y2="120" stroke="rgba(204,0,0,0.4)" stroke-width="1"/>
+        <rect x="40" y="120" width="180" height="62" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+        <text x="130" y="141" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" letter-spacing="2">CEO &amp; FOUNDER · MAJORITY</text>
+        <text x="130" y="161" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#fff" letter-spacing="1">PAUL SAID</text>
+        <text x="130" y="177" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="#CC0000" letter-spacing="2">(POLITO)</text>
+        <!-- Right: Wife -->
+        <line x1="300" y1="100" x2="300" y2="120" stroke="rgba(201,168,76,0.5)" stroke-width="1"/>
+        <rect x="220" y="120" width="160" height="62" rx="2" fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+        <text x="300" y="141" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(201,168,76,0.6)" letter-spacing="2">CO-OWNER · 40%</text>
+        <text x="300" y="161" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#C9A84C" letter-spacing="1" class="editable-field">[SPOUSE NAME]</text>
+        <text x="300" y="177" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(201,168,76,0.5)" letter-spacing="2">PROTECTED · RLT</text>
+        <!-- Line down from Paul -->
+        <line x1="130" y1="182" x2="130" y2="210" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Leadership path box -->
+        <rect x="40" y="210" width="380" height="58" rx="2" fill="rgba(68,255,153,0.05)" stroke="rgba(68,255,153,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="230" y="232" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(68,255,153,0.6)" letter-spacing="3">FUTURE OWNERSHIP PATH</text>
+        <text x="230" y="254" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="rgba(255,255,255,0.6)" letter-spacing="1">Leadership Co-Ownership</text>
+        <text x="230" y="270" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="rgba(68,255,153,0.5)" letter-spacing="2">Performance-Based · Written Into Agreements</text>
+        <!-- SPV box -->
+        <rect x="40" y="290" width="380" height="26" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+        <text x="230" y="308" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="rgba(255,255,255,0.3)" letter-spacing="2">Single-Project SPV LLCs for Major Productions</text>
+      </svg>
+    </div>
+    <div style="flex:0 0 240px; display:flex; flex-direction:column; gap:10px;">
+      <div class="slide-body" style="font-size:13px; margin-bottom:8px;">The ownership structure is <strong>built for protection and growth</strong>. The spouse's 40% is secured via a Revocable Living Trust. Leadership equity is performance-gated — earned, not given.</div>
+      <div class="quote-block" style="margin:0;">
+        <p style="font-size:13px;">Ownership isn't a gift. It's a reward for showing up, building, and proving you deserve a seat at the table.</p>
+        <cite>Paul Said (POLITO)</cite>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 21. CO-FOUNDING ═══ -->
+<div class="slide bg-black" data-index="20">
+  <div class="section-num">20</div>
+  <div class="slide-label">Beyond Agency Work</div>
+  <div class="slide-heading">NV as a <span class="red">Co-Founder</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:18px; max-width:580px;">
+    Next Vision doesn't just serve clients — we can <strong>co-found businesses and projects</strong>. When a concept is strong enough and we see the opportunity, NV brings creative, production, and marketing firepower in exchange for equity.
+  </div>
+  <div style="display:flex; gap:14px; max-width:800px; width:100%; flex-wrap:wrap;">
+    <div class="grid-card" style="flex:1; min-width:220px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid var(--red); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:22px; color:var(--white); margin-bottom:8px;">What NV Brings</div>
+      <ul style="list-style:none;">
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--red);">→</span>Brand identity &amp; creative strategy</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--red);">→</span>Video, photo, and content production</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--red);">→</span>Marketing and audience building</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; display:flex; gap:8px;"><span style="color:var(--red);">→</span>Network, community, and distribution</li>
+      </ul>
+    </div>
+    <div class="grid-card" style="flex:1; min-width:220px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(201,168,76,0.6); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:22px; color:var(--white); margin-bottom:8px;">What NV Gets</div>
+      <ul style="list-style:none;">
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--gold);">→</span>Equity stake in the co-founded entity</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--gold);">→</span>Revenue share from the project</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--gold);">→</span>Portfolio and case study rights</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; display:flex; gap:8px;"><span style="color:var(--gold);">→</span>Long-term strategic partnership</li>
+      </ul>
+    </div>
+    <div class="grid-card" style="flex:1; min-width:220px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(255,255,255,0.2); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:22px; color:var(--white); margin-bottom:8px;">Best Fit Projects</div>
+      <ul style="list-style:none;">
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--white-30);">→</span>Cultural brands &amp; businesses</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--white-30);">→</span>Film &amp; documentary productions</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; border-bottom:1px solid var(--white-10); display:flex; gap:8px;"><span style="color:var(--white-30);">→</span>Community-rooted enterprises</li>
+        <li style="font-family:var(--font-body); font-size:13px; color:var(--white-70); padding:6px 0; display:flex; gap:8px;"><span style="color:var(--white-30);">→</span>Media platforms &amp; IP plays</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 22. SPVs ═══ -->
+<div class="slide bg-dark" data-index="21">
+  <div class="section-num">21</div>
+  <div class="slide-label">Legal Structure</div>
+  <div class="slide-heading">Special Purpose <span class="red">Vehicles (SPVs)</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:24px; max-width:820px; width:100%; flex-wrap:wrap;">
+    <div style="flex:1; min-width:280px;">
+      <div class="slide-body" style="margin-bottom:16px;">
+        For major productions and co-founded ventures, NV creates a <strong>Single-Project LLC</strong> — a Special Purpose Vehicle. This keeps each project financially separate from the main company and allows outside investors to participate cleanly.
+      </div>
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Protects Next Vision</strong><span>Project-specific risk stays inside the SPV — doesn't touch NV's main assets</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Enables Project Investors</strong><span>Investors can buy into a specific film or venture without taking equity in all of NV</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Clean Distribution</strong><span>Revenue from that project distributes to SPV members only — no company-wide complication</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>When We Use Them</strong><span>Major film productions, large events, co-founded businesses, and international partnerships</span></div></li>
+      </ul>
+    </div>
+    <!-- SPV Diagram -->
+    <div style="flex:0 0 260px; display:flex; align-items:center;">
+      <svg viewBox="0 0 260 280" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+        <rect x="80" y="10" width="100" height="44" rx="2" fill="rgba(204,0,0,0.12)" stroke="#CC0000" stroke-width="1.5"/>
+        <text x="130" y="27" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" letter-spacing="2">PARENT</text>
+        <text x="130" y="46" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#fff">NV LLC</text>
+        <line x1="130" y1="54" x2="130" y2="82" stroke="rgba(204,0,0,0.5)" stroke-width="1" stroke-dasharray="3,3"/>
+        <rect x="55" y="82" width="150" height="44" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <text x="130" y="100" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" letter-spacing="2">SPV ENTITY</text>
+        <text x="130" y="118" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#fff">Project LLC</text>
+        <line x1="130" y1="126" x2="130" y2="152" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="50" y1="152" x2="210" y2="152" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="75" y1="152" x2="75" y2="172" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="130" y1="152" x2="130" y2="172" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="185" y1="152" x2="185" y2="172" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <rect x="30" y="172" width="90" height="36" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <text x="75" y="186" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" letter-spacing="1">NV Equity</text>
+        <text x="75" y="200" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="12" fill="#CC0000">NV Share</text>
+        <rect x="103" y="172" width="54" height="36" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <text x="130" y="186" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" letter-spacing="1">Team</text>
+        <text x="130" y="200" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="12" fill="#fff">Crew</text>
+        <rect x="140" y="172" width="90" height="36" rx="2" fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+        <text x="185" y="186" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(201,168,76,0.5)" letter-spacing="1">Outside</text>
+        <text x="185" y="200" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="12" fill="#C9A84C">Investor</text>
+        <text x="130" y="240" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="rgba(255,255,255,0.25)" letter-spacing="2">REVENUE DISTRIBUTES PER SHARE</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 23. STUDIO VISION ═══ -->
+<div class="slide bg-black" data-index="22">
+  <div class="section-num">22</div>
+  <div class="slide-label">Where We're Going</div>
+  <div class="slide-heading">The NV <span class="red">Studio Vision</span></div>
+  <div class="red-rule"></div>
+  <div class="slide-body" style="margin-bottom:14px;">
+    The studio is not a dream — it's a milestone. Every client we land, every project we complete, every point distributed gets us closer to a physical home base.
+  </div>
+  <div class="studio-grid">
+    <div class="studio-space" style="grid-column:span 2; background:rgba(204,0,0,0.08); border-color:rgba(204,0,0,0.3);">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span></div>
+      <div class="studio-space-title">Production Studio — The Main Stage</div>
+      <div class="studio-space-desc">Full video production room with professional lighting grid, backdrops, and camera rig. The heartbeat of NV operations.</div>
+    </div>
+    <div class="studio-space">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span></div>
+      <div class="studio-space-title">Podcast Studio</div>
+      <div class="studio-space-desc">Acoustically treated, multi-mic setup for NV shows and client productions</div>
+    </div>
+    <div class="studio-space">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span></div>
+      <div class="studio-space-title">Photography Studio</div>
+      <div class="studio-space-desc">Portrait, product, and commercial photography space with seamless backdrop system</div>
+    </div>
+    <div class="studio-space">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></span></div>
+      <div class="studio-space-title">Editing Suites</div>
+      <div class="studio-space-desc">Color-graded editing rooms for post-production and finishing work</div>
+    </div>
+    <div class="studio-space">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span></div>
+      <div class="studio-space-title">Co-Working Space</div>
+      <div class="studio-space-desc">Creative workspace for collective members, clients, and collaborators</div>
+    </div>
+    <div class="studio-space">
+      <div class="studio-space-icon"><span class="nv-icon lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div>
+      <div class="studio-space-title">Multi-City Network</div>
+      <div class="studio-space-desc">Long-term: NV studios in multiple cities, internationally connected through creative partnerships</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 24. MILLION DOLLAR MISSION ═══ -->
+<div class="slide bg-red centered" data-index="23">
+  <div style="text-align:center; z-index:1; max-width:760px;">
+    <div class="slide-label" style="justify-content:center; color:rgba(0,0,0,0.5);">The Bottom Line</div>
+    <div style="font-family:var(--font-display); font-size:clamp(60px,11vw,130px); line-height:0.85; color:#fff; text-transform:uppercase; letter-spacing:2px; margin-bottom:16px;">
+      WE ARE<br>BUILDING A<br><span style="-webkit-text-stroke:3px #000; color:transparent;">MILLION</span><br>DOLLAR<br><span style="color:#000;">COMPANY</span>
+    </div>
+    <div class="red-rule wide center" style="background:#000;"></div>
+    <div style="font-family:var(--font-body); font-size:clamp(14px,1.8vw,18px); color:rgba(0,0,0,0.7); max-width:560px; margin:0 auto; line-height:1.7; font-weight:400;">
+      This is not a freelance gig. This is not a passion project with no plan. This is a structured business, with a system, with a team, and with a path to <strong style="color:#000;">generational wealth</strong> for everyone in this room who earns it.
+    </div>
+    <div style="margin-top:22px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.2); padding:8px 20px; font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:rgba(0,0,0,0.7); text-transform:uppercase; font-weight:700;">6 Revenue Streams</div>
+      <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.2); padding:8px 20px; font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:rgba(0,0,0,0.7); text-transform:uppercase; font-weight:700;">Point-Based Pay</div>
+      <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.2); padding:8px 20px; font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:rgba(0,0,0,0.7); text-transform:uppercase; font-weight:700;">Equity Path</div>
+      <div style="background:rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.2); padding:8px 20px; font-family:var(--font-condensed); font-size:11px; letter-spacing:3px; color:rgba(0,0,0,0.7); text-transform:uppercase; font-weight:700;">NV Studio</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 25. CURRENT PROJECTS ═══ -->
+<div class="slide bg-dark" data-index="24">
+  <div class="section-num">24</div>
+  <div class="slide-label">Right Now</div>
+  <div class="slide-heading">Current <span class="red">Projects</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:16px; max-width:800px; width:100%; flex-wrap:wrap; margin-top:8px;">
+    <div style="flex:1; min-width:220px; background:rgba(204,0,0,0.08); border:1px solid rgba(204,0,0,0.25); border-top:3px solid var(--red); padding:22px 20px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:8px;">ACTIVE PROJECT 01</div>
+      <div style="font-family:var(--font-display); font-size:clamp(24px,3vw,32px); color:var(--white); margin-bottom:10px;" class="editable-field">Raw Salon</div>
+      <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); line-height:1.6; margin-bottom:12px;">Branding &amp; content production. Deliverables in progress.</div>
+      <div class="badge" style="font-size:9px;">In Production</div>
+    </div>
+    <div style="flex:1; min-width:220px; background:rgba(204,0,0,0.08); border:1px solid rgba(204,0,0,0.25); border-top:3px solid var(--red); padding:22px 20px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:8px;">ACTIVE PROJECT 02</div>
+      <div style="font-family:var(--font-display); font-size:clamp(24px,3vw,32px); color:var(--white); margin-bottom:10px;" class="editable-field">El Amigo</div>
+      <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); line-height:1.6; margin-bottom:12px;">Creative strategy &amp; visual storytelling. Content in development.</div>
+      <div class="badge" style="font-size:9px;">In Production</div>
+    </div>
+    <div style="flex:1; min-width:220px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(255,255,255,0.2); padding:22px 20px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--white-50); margin-bottom:8px;">PIPELINE</div>
+      <div style="font-family:var(--font-display); font-size:clamp(24px,3vw,32px); color:var(--white-50); margin-bottom:10px;">Projects Pending</div>
+      <div style="font-family:var(--font-body); font-size:13px; color:var(--white-50); line-height:1.6; margin-bottom:12px;">Additional projects in discussions and proposal stages. Details shared with team as they close.</div>
+      <div class="badge" style="font-size:9px; background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.4);">Pipeline</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 26. TULSA FILM TRIBE ═══ -->
+<div class="slide bg-black" data-index="25">
+  <div class="section-num">25</div>
+  <div class="slide-label">Our Community</div>
+  <div class="slide-heading">Tulsa <span class="red">Film Tribe</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:24px; max-width:820px; width:100%; flex-wrap:wrap; margin-top:6px;">
+    <div style="flex:1; min-width:280px;">
+      <div class="slide-body" style="margin-bottom:16px;">
+        The Tulsa Film Tribe is being formed as an <strong>independent 501(c)(3) nonprofit</strong> — not a subsidiary of NV, but a sister organization. This distinction matters: it keeps NV's agency business separate from the collective's community mission, and unlocks grant funding and nonprofit benefits.
+      </div>
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Independent 501(c)(3)</strong><span>Its own legal identity — eligible for grants, donations, and public charity status</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>NV's Talent Pipeline</strong><span>Film Tribe members are the first call for NV projects — community builds the workforce</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Membership Tiers</strong><span>Free community level, paid member tiers with access to resources, equipment, and projects</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Cultural Programming</strong><span>Workshops, screenings, panels, and productions that serve Tulsa's creative community</span></div></li>
+      </ul>
+    </div>
+    <div style="flex:0 0 240px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid var(--red); padding:22px 20px;">
+      <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:14px;">WHO BELONGS</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Filmmakers &amp; Directors</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Photographers</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Graphic Designers</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Musicians &amp; Sound</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Writers &amp; Storytellers</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Editors &amp; Colorists</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Social Media Creatives</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); display:flex; gap:8px; align-items:center;"><span style="color:var(--red); font-size:10px;">◈</span> Anyone who creates</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 27. WHAT'S NEXT ═══ -->
+<div class="slide bg-charcoal" data-index="26">
+  <div class="section-num">26</div>
+  <div class="slide-label">Immediate Action</div>
+  <div class="slide-heading">What's <span class="red">Next</span></div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:14px; max-width:820px; width:100%; flex-wrap:wrap; margin-top:8px;">
+    <div style="flex:1; min-width:180px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid var(--red); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:28px; color:var(--red); margin-bottom:4px;">01</div>
+      <div style="font-family:var(--font-condensed); font-size:13px; color:var(--white); font-weight:700; letter-spacing:0.5px; margin-bottom:8px;">Sign Your Agreement</div>
+      <div style="font-family:var(--font-body); font-size:12px; color:var(--white-50); line-height:1.5;">Partner or Leadership agreement — today, before you leave</div>
+    </div>
+    <div style="flex:1; min-width:180px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid var(--red); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:28px; color:var(--red); margin-bottom:4px;">02</div>
+      <div style="font-family:var(--font-condensed); font-size:13px; color:var(--white); font-weight:700; letter-spacing:0.5px; margin-bottom:8px;">Get Into Notion</div>
+      <div style="font-family:var(--font-body); font-size:12px; color:var(--white-50); line-height:1.5;">You'll receive your invite — our central operating hub</div>
+    </div>
+    <div style="flex:1; min-width:180px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(255,255,255,0.2); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:28px; color:rgba(255,255,255,0.4); margin-bottom:4px;">03</div>
+      <div style="font-family:var(--font-condensed); font-size:13px; color:var(--white); font-weight:700; letter-spacing:0.5px; margin-bottom:8px;">First Project Briefings</div>
+      <div style="font-family:var(--font-body); font-size:12px; color:var(--white-50); line-height:1.5;">Active projects will be briefed — your role defined per your skills</div>
+    </div>
+    <div style="flex:1; min-width:180px; background:var(--white-5); border:1px solid var(--white-10); border-top:3px solid rgba(255,255,255,0.2); padding:20px 18px;">
+      <div style="font-family:var(--font-display); font-size:28px; color:rgba(255,255,255,0.4); margin-bottom:4px;">04</div>
+      <div style="font-family:var(--font-condensed); font-size:13px; color:var(--white); font-weight:700; letter-spacing:0.5px; margin-bottom:8px;">Film Tribe Launch</div>
+      <div style="font-family:var(--font-body); font-size:12px; color:var(--white-50); line-height:1.5;">Public launch of the collective — bring your network</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 28. YOUR PLACE ═══ -->
+<div class="slide bg-black" data-index="27">
+  <div class="section-num">27</div>
+  <div class="slide-label">The Real Talk</div>
+  <div class="slide-heading">Your <span class="red">Place</span> In This</div>
+  <div class="red-rule"></div>
+  <div style="display:flex; gap:28px; max-width:820px; width:100%; flex-wrap:wrap;">
+    <div style="flex:1; min-width:280px;">
+      <div class="slide-body" style="margin-bottom:20px;">
+        You are not here to fill a seat. <strong>You are here because we believe you can help build something real.</strong> Every person in this room was chosen intentionally.
+      </div>
+      <ul class="nv-list">
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>You Are Not an Employee</strong><span>You are a builder — your value scales with your contribution, not a fixed hourly rate</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Your Role Has Authority</strong><span>You own your domain — bring solutions, not just problems</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Your Growth is Tracked</strong><span>Points, milestones, and performance — all documented and rewarded</span></div></li>
+        <li><span class="li-icon">▸</span><div class="li-body"><strong>Ownership is Possible</strong><span>If you show up and build it with us, you can own a piece of what we create</span></div></li>
+      </ul>
+    </div>
+    <div style="flex:0 0 260px;">
+      <div class="quote-block" style="margin-bottom:14px;">
+        <p class="editable-field">I'm not looking for workers. I'm looking for people who want to escape the rat race with me — and are willing to build their way out.</p>
+        <cite class="editable-field">Paul Said · POLITO · Founder</cite>
+      </div>
+      <div style="background:var(--white-5); border:1px solid var(--white-10); padding:16px 18px;">
+        <div style="font-family:var(--font-condensed); font-size:10px; letter-spacing:3px; color:var(--red); margin-bottom:10px;">THE DEAL</div>
+        <div style="font-family:var(--font-body); font-size:13px; color:var(--white-70); line-height:1.6;">You bring your best. NV tracks it, pays it, and as the company grows — so does your stake. This is what building together looks like.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 29. CLOSING ═══ -->
+<div class="slide bg-black centered" data-index="28">
+  <div class="slash-accent"></div>
+  <div class="slash-accent-2"></div>
+  <div style="z-index:1; text-align:center;">
+    <div class="close-big">
+      BUILD<br>
+      <span class="block-red">DIFFER</span><span style="-webkit-text-stroke:3px var(--red); color:transparent; display:block; line-height:0.85;">ENT.</span>
+    </div>
+    <div class="red-rule wide center" style="margin-top:20px;"></div>
+    <div class="slide-body" style="text-align:center; margin:14px auto 22px; max-width:520px;">
+      Create together. Earn together. Own together.<br>
+      Welcome to Next Vision.
+    </div>
+    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+      <div style="font-family:var(--font-condensed); font-size:12px; letter-spacing:3px; color:var(--white-50); text-transform:uppercase;">nextvisiontulsa.com</div>
+      <div style="font-family:var(--font-condensed); font-size:12px; letter-spacing:3px; color:var(--red); text-transform:uppercase;">◈</div>
+      <div style="font-family:var(--font-condensed); font-size:12px; letter-spacing:3px; color:var(--white-50); text-transform:uppercase;">Tulsa Film Tribe</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #slideshow -->
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.nav-btn,.dot,[onclick]').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ─── SLIDES ───
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0;
+let isAnimating = false;
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+
+function goTo(idx) {
+  if (isAnimating || idx === current || idx < 0 || idx >= total) return;
+  isAnimating = true;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  const prev = current;
+  current = idx;
+  setTimeout(() => { slides[prev].classList.remove('exit'); }, 400);
+  setTimeout(() => {
+    slides[current].classList.add('active');
+    updateUI();
+    isAnimating = false;
+  }, 80);
+}
+
+function updateUI() {
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  document.getElementById('slide-num').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+}
+
+const next = () => goTo(current + 1);
+const prev = () => goTo(current - 1);
+document.getElementById('btn-next').addEventListener('click', next);
+document.getElementById('btn-prev').addEventListener('click', prev);
+
+document.addEventListener('keydown', e => {
+  if (editMode) return;
+  if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+  if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+});
+
+// Touch swipe
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) { dx < 0 ? next() : prev(); }
+}, { passive: true });
+
+updateUI();
+
+// ─── EDIT MODE ───
+let editMode = false;
+const EDITABLE_SELECTORS = '.editable-field';
+
+function toggleEdit() {
+  editMode = !editMode;
+  const toolbar = document.getElementById('edit-toolbar');
+  const toggle = document.getElementById('edit-toggle');
+  toolbar.classList.toggle('visible', editMode);
+  toggle.classList.toggle('active', editMode);
+
+  // Make editable fields content-editable
+  document.querySelectorAll(EDITABLE_SELECTORS).forEach(el => {
+    if (editMode) {
+      el.setAttribute('contenteditable', 'true');
+      el.style.cursor = 'text';
+    } else {
+      el.removeAttribute('contenteditable');
+      el.style.cursor = '';
+    }
+  });
+
+  // When edit mode off, also disable nav via keyboard (handled above)
+}
+
+// ─── LOGO UPLOAD ───
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const src = e.target.result;
+    // Show the uploaded image - displayed as-is, no CSS filters applied
+    const imgEl = document.getElementById('logo-img-corner');
+    imgEl.src = src;
+    imgEl.style.display = 'block';
+    imgEl.style.filter = 'none';
+    // Hide all placeholder elements in the corner logo
+    document.getElementById('logo-placeholder-corner').style.display = 'none';
+    document.querySelectorAll('#corner-logo .corner-divider').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('#corner-logo .corner-sub').forEach(el => el.style.display = 'none');
+  };
+  reader.onerror = function() { console.error('Logo upload failed'); };
+  reader.readAsDataURL(file);
+}
+
+// ─── KEYBOARD SHORTCUT HINTS ───
+// E = edit toggle
+document.addEventListener('keydown', e => {
+  if (e.key === 'e' || e.key === 'E') {
+    if (!e.target.getAttribute('contenteditable')) toggleEdit();
+  }
+});
+</script>
+</body>
+</html>
