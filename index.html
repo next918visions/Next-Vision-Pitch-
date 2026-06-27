@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Next Vision LLC — Investor Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --nv-red:#C0392B; --nv-red-deep:#9E2D22; --nv-red-tint:#FBEAE7;
+  --nv-gold:#C8922A; --nv-gold-deep:#A6761F; --nv-gold-tint:#F7EBD3;
+  --nv-ink:#0C0B09; --nv-paper:#FAF8F4; --nv-surface:#FFFFFF;
+  --nv-muted:#57514A; --nv-faint:#8A837A; --nv-line:rgba(12,11,9,0.10);
+  --nv-display:"Syne",system-ui,sans-serif;
+  --nv-body:"Plus Jakarta Sans",system-ui,sans-serif;
+  --nv-radius:10px; --nv-radius-lg:16px;
+  --nv-shadow:0 1px 2px rgba(12,11,9,0.06),0 8px 24px rgba(12,11,9,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--nv-body);background:var(--nv-paper);color:var(--nv-ink);line-height:1.6}
+
+/* ── LAYOUT ── */
+.page{max-width:900px;margin:0 auto;padding:48px 32px 80px}
+@media(max-width:640px){.page{padding:28px 16px 60px}}
+
+/* ── ANIMATIONS ── */
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;transform:translateY(18px);animation:rise .5s cubic-bezier(.22,1,.36,1) forwards}
+
+/* ── HEADER ── */
+.header{display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;
+  padding-bottom:28px;border-bottom:2px solid var(--nv-ink);margin-bottom:40px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--nv-gold);margin-bottom:10px}
+.header h1{font-family:var(--nv-display);font-weight:800;
+  font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.03em}
+.header h1 span{color:var(--nv-red)}
+.header-meta{text-align:right;font-size:12px;font-weight:600;color:var(--nv-muted);line-height:1.9}
+.header-meta strong{color:var(--nv-ink);display:block;font-size:13px}
+@media(max-width:640px){.header{grid-template-columns:1fr}.header-meta{text-align:left}}
+
+/* ── OPENING ── */
+.opening{margin-bottom:40px}
+.opening p{font-size:16px;line-height:1.78;color:var(--nv-muted);max-width:72ch}
+.opening p+p{margin-top:14px}
+.opening strong{color:var(--nv-ink);font-weight:700}
+
+/* ── PHILOSOPHY STRIP ── */
+.philosophy{background:var(--nv-ink);color:var(--nv-paper);border-radius:var(--nv-radius-lg);
+  padding:26px 28px;display:flex;gap:0;margin-bottom:40px}
+.phil-item{flex:1;padding:0 22px;border-left:1px solid rgba(242,236,227,.14)}
+.phil-item:first-child{padding-left:0;border-left:none}
+.phil-item .word{font-family:var(--nv-display);font-weight:800;font-size:1.05rem;
+  color:var(--nv-gold);letter-spacing:-.01em;display:block;margin-bottom:3px}
+.phil-item .meaning{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(242,236,227,.45);display:block;margin-bottom:5px}
+.phil-item p{font-size:12px;line-height:1.6;color:rgba(242,236,227,.72)}
+@media(max-width:640px){
+  .philosophy{flex-direction:column;gap:18px}
+  .phil-item{border-left:none;padding-left:0;border-top:1px solid rgba(242,236,227,.14);padding-top:14px}
+  .phil-item:first-child{border-top:none;padding-top:0}
+}
+
+/* ── SECTION LABELS ── */
+.slabel{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--nv-red);margin-bottom:6px}
+.sheading{font-family:var(--nv-display);font-weight:800;font-size:clamp(1.4rem,2.8vw,1.9rem);
+  letter-spacing:-.02em;color:var(--nv-ink);margin-bottom:16px}
+
+/* ── ENGINES ── */
+.engines{margin-bottom:40px}
+.engines-intro{font-size:14.5px;color:var(--nv-muted);max-width:68ch;line-height:1.72;margin-bottom:24px}
+.engine-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.engine-grid{grid-template-columns:1fr}}
+.engine-card{background:var(--nv-surface);border-radius:var(--nv-radius-lg);padding:24px;
+  border:1px solid var(--nv-line);box-shadow:var(--nv-shadow);position:relative;overflow:hidden}
+.engine-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.engine-card.e1::before{background:var(--nv-red)}
+.engine-card.e2::before{background:var(--nv-gold)}
+.engine-badge{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:12px}
+.e1 .engine-badge{background:var(--nv-red-tint);color:var(--nv-red-deep)}
+.e2 .engine-badge{background:var(--nv-gold-tint);color:var(--nv-gold-deep)}
+.engine-card h3{font-family:var(--nv-display);font-weight:800;font-size:1.1rem;letter-spacing:-.02em;margin-bottom:8px}
+.engine-sub{font-size:11px;font-weight:600;color:var(--nv-faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.engine-card p{font-size:13px;line-height:1.65;color:var(--nv-muted);margin-bottom:14px}
+.slist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.slist li{font-size:12px;font-weight:600;color:var(--nv-ink);display:flex;align-items:center;gap:8px}
+.slist li::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.e1 .slist li::before{background:var(--nv-red)}
+.e2 .slist li::before{background:var(--nv-gold)}
+
+/* ── ANCHOR ── */
+.anchor{background:var(--nv-ink);border-radius:var(--nv-radius-lg);padding:30px 32px;
+  margin-bottom:40px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+.anchor .slabel{color:var(--nv-gold)}
+.anchor-heading{font-family:var(--nv-display);font-weight:800;font-size:1.55rem;
+  letter-spacing:-.02em;color:var(--nv-paper);margin-bottom:8px}
+.anchor p{font-size:13.5px;line-height:1.7;color:rgba(242,236,227,.72);max-width:52ch}
+.anchor-stats{display:flex;flex-direction:column;gap:18px;min-width:130px}
+.stat{text-align:right}
+.stat .snum{font-family:var(--nv-display);font-weight:800;font-size:1.75rem;color:var(--nv-gold);
+  line-height:1;letter-spacing:-.02em;display:block}
+.stat .slbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(242,236,227,.42);display:block;margin-top:2px}
+@media(max-width:640px){.anchor{grid-template-columns:1fr}.anchor-stats{flex-direction:row;justify-content:space-around}.stat{text-align:center}}
+
+/* ── FLYWHEEL ── */
+.flywheel{margin-bottom:40px}
+.flywheel-intro{font-size:14.5px;color:var(--nv-muted);line-height:1.72;max-width:68ch;margin-bottom:24px}
+.fw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:640px){.fw-steps{grid-template-columns:1fr 1fr}}
+.fw-step{background:var(--nv-surface);border:1px solid var(--nv-line);border-radius:var(--nv-radius);
+  padding:18px 14px;text-align:center;box-shadow:var(--nv-shadow)}
+.fw-num{font-family:var(--nv-display);font-weight:800;font-size:1.9rem;color:var(--nv-red-tint);
+  line-height:1;display:block;margin-bottom:7px}
+.fw-title{font-weight:700;font-size:12px;color:var(--nv-ink);margin-bottom:5px;line-height:1.3}
+.fw-desc{font-size:11px;color:var(--nv-muted);line-height:1.55}
+
+/* ── COMMUNITY ── */
+.community{margin-bottom:40px}
+.community-intro{font-size:14.5px;color:var(--nv-muted);line-height:1.72;max-width:68ch;margin-bottom:24px}
+.comm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.comm-grid{grid-template-columns:1fr}}
+.comm-card{border-left:3px solid var(--nv-gold);padding:14px 18px;
+  background:var(--nv-gold-tint);border-radius:0 var(--nv-radius) var(--nv-radius) 0}
+.comm-card h4{font-weight:700;font-size:13px;color:var(--nv-ink);margin-bottom:5px}
+.comm-card p{font-size:12px;line-height:1.6;color:var(--nv-muted)}
+
+/* ══════════════════════════════════════════════
+   DRILL-DOWN EXPLORER — the interactive layer
+══════════════════════════════════════════════ */
+.explorer{margin-bottom:40px}
+.explorer-intro{font-size:14.5px;color:var(--nv-muted);line-height:1.72;max-width:68ch;margin-bottom:20px}
+
+/* Tab nav */
+.tab-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;border-bottom:2px solid var(--nv-line);padding-bottom:0}
+.tab-btn{font-family:var(--nv-body);font-size:12px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;padding:8px 16px;border:none;background:none;color:var(--nv-faint);
+  cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 180ms ease-out,border-color 180ms ease-out}
+.tab-btn:hover{color:var(--nv-ink)}
+.tab-btn.active{color:var(--nv-red);border-bottom-color:var(--nv-red)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── FINANCIAL TABLE ── */
+.fin-table-wrap{overflow-x:auto;border-radius:var(--nv-radius-lg);border:1px solid var(--nv-line);
+  box-shadow:var(--nv-shadow);background:var(--nv-surface)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead{background:var(--nv-ink);color:var(--nv-paper)}
+thead th{padding:11px 14px;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;text-align:right}
+thead th:first-child{text-align:left}
+tbody tr{border-bottom:1px solid var(--nv-line)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#F5F2EE}
+tbody td{padding:9px 14px;color:var(--nv-ink);text-align:right}
+tbody td:first-child{text-align:left;color:var(--nv-muted);font-weight:500}
+tbody .group-header td{background:var(--nv-paper);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--nv-faint);padding:8px 14px}
+tbody .subtotal td{font-weight:700;color:var(--nv-ink);background:#F0EDE8}
+tbody .total td{font-weight:700;font-size:13px;color:var(--nv-surface);background:var(--nv-ink)}
+tbody .neg{color:var(--nv-red)!important}
+tbody .pos{color:#2E7D52!important}
+tbody .muted{color:var(--nv-faint)!important}
+
+/* ── MONTHLY MODEL ── */
+.model-wrap{overflow-x:auto;border-radius:var(--nv-radius-lg);border:1px solid var(--nv-line);
+  box-shadow:var(--nv-shadow);background:var(--nv-surface)}
+.model-table{width:100%;border-collapse:collapse;font-size:11px;min-width:860px}
+.model-table thead{background:var(--nv-ink);color:var(--nv-paper)}
+.model-table thead th{padding:9px 10px;font-weight:700;font-size:10px;letter-spacing:.06em;text-transform:uppercase;text-align:right;white-space:nowrap}
+.model-table thead th:first-child{text-align:left;min-width:160px}
+.model-table tbody tr{border-bottom:1px solid var(--nv-line)}
+.model-table tbody tr:hover{background:#F5F2EE}
+.model-table tbody td{padding:7px 10px;text-align:right;color:var(--nv-ink)}
+.model-table tbody td:first-child{text-align:left;color:var(--nv-muted);font-weight:500;font-size:10.5px}
+.model-table .mrow-section td{background:var(--nv-paper);font-size:9.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--nv-faint);padding:6px 10px}
+.model-table .mrow-total td{font-weight:700;color:var(--nv-ink);background:#F0EDE8}
+.model-table .mrow-net td{font-weight:700;color:var(--nv-surface);background:var(--nv-ink)}
+.model-table .mrow-cash td{background:var(--nv-gold-tint);font-weight:700;color:var(--nv-gold-deep)}
+.model-note{font-size:11.5px;color:var(--nv-faint);margin-top:14px;line-height:1.6;font-style:italic}
+
+/* ── CAC ── */
+.cac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+@media(max-width:640px){.cac-grid{grid-template-columns:1fr}}
+.cac-card{background:var(--nv-surface);border:1px solid var(--nv-line);border-radius:var(--nv-radius);
+  padding:20px;box-shadow:var(--nv-shadow)}
+.cac-card .bnum{font-family:var(--nv-display);font-weight:800;font-size:2rem;color:var(--nv-red);
+  letter-spacing:-.03em;line-height:1;display:block;margin-bottom:3px}
+.cac-card .blbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--nv-faint);display:block;margin-bottom:7px}
+.cac-card .bnote{font-size:12px;color:var(--nv-muted);line-height:1.55}
+.headroom-bar{background:var(--nv-surface);border:1px solid var(--nv-line);border-radius:var(--nv-radius);
+  padding:20px 24px;box-shadow:var(--nv-shadow)}
+.headroom-bar h4{font-weight:700;font-size:13px;color:var(--nv-ink);margin-bottom:10px}
+.bar-track{background:#EDE9E3;border-radius:100px;height:12px;position:relative;margin-bottom:8px}
+.bar-fill-ceiling{background:var(--nv-gold-tint);border-radius:100px;height:12px;width:100%;position:absolute}
+.bar-fill-cac{background:var(--nv-red);border-radius:100px;height:12px;width:1.1%;position:absolute;z-index:2}
+.bar-labels{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;color:var(--nv-muted)}
+.bar-labels .cac-marker{color:var(--nv-red)}
+.bar-labels .ceil-marker{color:var(--nv-gold-deep)}
+.headroom-note{font-size:12px;color:var(--nv-muted);line-height:1.6;margin-top:12px}
+
+/* ── CAP TABLE ── */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.cap-grid{grid-template-columns:1fr}}
+.cap-card{background:var(--nv-surface);border:1px solid var(--nv-line);border-radius:var(--nv-radius-lg);
+  padding:22px;box-shadow:var(--nv-shadow)}
+.cap-card h4{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--nv-faint);margin-bottom:14px}
+.cap-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;
+  border-bottom:1px solid var(--nv-line);font-size:13px}
+.cap-row:last-child{border-bottom:none;font-weight:700}
+.cap-row .role{color:var(--nv-muted)}
+.cap-row .pct{font-weight:700;color:var(--nv-ink)}
+.cap-row .val{color:var(--nv-faint);font-size:11.5px}
+.cap-highlight{color:var(--nv-gold)!important}
+.cap-note{font-size:11.5px;color:var(--nv-faint);margin-top:14px;line-height:1.6;font-style:italic}
+
+/* ── USE OF FUNDS ── */
+.funds-wrap{background:var(--nv-surface);border:1px solid var(--nv-line);border-radius:var(--nv-radius-lg);
+  padding:24px;box-shadow:var(--nv-shadow)}
+.funds-title{font-weight:700;font-size:13px;color:var(--nv-ink);margin-bottom:4px}
+.funds-sub{font-size:11.5px;color:var(--nv-faint);margin-bottom:18px}
+.fund-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.fund-label{font-size:12px;font-weight:600;color:var(--nv-ink);min-width:180px}
+.fund-bar-wrap{flex:1;background:#EDE9E3;border-radius:100px;height:8px;position:relative}
+.fund-bar{height:8px;border-radius:100px;transition:width .4s cubic-bezier(.22,1,.36,1)}
+.fund-amount{font-size:12px;font-weight:700;color:var(--nv-ink);min-width:52px;text-align:right}
+.fund-engine{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:100px}
+.fund-e1{background:var(--nv-red-tint);color:var(--nv-red-deep)}
+.fund-e2{background:var(--nv-gold-tint);color:var(--nv-gold-deep)}
+.funds-total{display:flex;justify-content:space-between;padding-top:14px;margin-top:4px;
+  border-top:2px solid var(--nv-ink);font-weight:700;font-size:13.5px}
+
+/* ── BALANCE SHEET ── */
+.bs-note{font-size:12px;color:var(--nv-faint);margin-top:14px;font-style:italic;line-height:1.6}
+
+/* ── CLOSING ── */
+.closing{background:var(--nv-red);border-radius:var(--nv-radius-lg);padding:34px 38px;margin-bottom:40px}
+.closing p{font-size:16px;line-height:1.78;color:rgba(255,255,255,.88);max-width:66ch}
+.closing p strong{color:#fff;font-weight:700}
+.closing p+p{margin-top:12px}
+.closing-sig{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2);
+  display:flex;justify-content:space-between;align-items:flex-end}
+.sig-name{font-family:var(--nv-display);font-weight:800;font-size:.95rem;color:#fff;letter-spacing:-.01em;display:block}
+.sig-title{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;display:block}
+.sig-date{font-size:11px;color:rgba(255,255,255,.4);font-weight:600;letter-spacing:.06em}
+@media(max-width:640px){.closing{padding:24px 20px}.closing-sig{flex-direction:column;gap:10px;align-items:flex-start}}
+
+/* ── FOOTER ── */
+.footer{display:flex;justify-content:space-between;align-items:center;
+  padding-top:22px;border-top:1px solid var(--nv-line)}
+.footer p{font-size:11px;color:var(--nv-faint)}
+.footer strong{color:var(--nv-ink);font-weight:700}
+.print-btn{font-family:var(--nv-body);font-size:12px;font-weight:700;background:var(--nv-ink);
+  color:var(--nv-paper);border:none;border-radius:var(--nv-radius);padding:9px 18px;cursor:pointer;
+  letter-spacing:.04em;transition:background 180ms ease-out}
+.print-btn:hover{background:var(--nv-red)}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  .footer,.print-btn,.no-print{display:none!important}
+  .tab-panel{display:block!important;margin-bottom:32px}
+  .tab-panel+.tab-panel{page-break-before:always}
+  body{background:white}
+  .page{padding:24px 20px}
+  .explorer-intro{display:none}
+  .explorer>.slabel::before{content:"Financial Details — All Sections";display:block;font-size:14px;font-weight:800;font-family:var(--nv-display);color:var(--nv-ink);margin-bottom:16px;letter-spacing:-.01em}
+}
+
+/* delay helpers */
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}
+.d4{animation-delay:.26s}.d5{animation-delay:.33s}.d6{animation-delay:.40s}
+.d7{animation-delay:.47s}.d8{animation-delay:.54s}.d9{animation-delay:.61s}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header class="header fade-up d1">
+  <div>
+    <p class="eyebrow">Investor Overview · Confidential · June 2026</p>
+    <h1>Built on <span>Community.</span><br>Powered by Vision.</h1>
+  </div>
+  <div class="header-meta">
+    <strong>Next Vision LLC</strong>
+    Tulsa, Oklahoma<br>Founded 2023<br>nextvisiontulsa.com
+  </div>
+</header>
+
+<!-- OPENING -->
+<section class="opening fade-up d2">
+  <p>There is a Swahili word — <strong>Daraja</strong> — that means bridge. Next Vision LLC was built to be exactly that: a bridge between creative people and economic opportunity, between local community and scalable technology, between story and structure. We are a Tulsa-based creative and technology company operating at the intersection of film, media, AI tools, and community development.</p>
+  <p>We are not a typical agency, and we are not a typical software company. We are both — on purpose. Every service we deliver builds the community that needs our products. Every product we ship creates infrastructure for the community we serve. That loop is the business.</p>
+</section>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy fade-up d3">
+  <div class="phil-item">
+    <span class="word">Ubuntu</span>
+    <span class="meaning">The Foundation</span>
+    <p>I am because we are. Every dollar earned at Next Vision is earned in service of a community, not extracted from one.</p>
+  </div>
+  <div class="phil-item">
+    <span class="word">Daraja</span>
+    <span class="meaning">The Model</span>
+    <p>Bridge. We connect filmmakers to work, athletes to platforms, and businesses to tools they could never afford alone.</p>
+  </div>
+  <div class="phil-item">
+    <span class="word">Umoja</span>
+    <span class="meaning">The Goal</span>
+    <p>Unity. A thriving creative economy in Tulsa — and an exportable system any city can adopt.</p>
+  </div>
+</div>
+
+<!-- ENGINES -->
+<section class="engines fade-up d4">
+  <p class="slabel">How We Make Money</p>
+  <h2 class="sheading">Two Engines. One Flywheel.</h2>
+  <p class="engines-intro">Next Vision generates revenue through two complementary engines that reinforce each other. Engine 1 funds operations and builds community trust while we develop it. Engine 2 compounds that trust into recurring, scalable revenue that does not depend on trading time for dollars.</p>
+  <div class="engine-grid">
+    <div class="engine-card e1">
+      <span class="engine-badge">Engine 1</span>
+      <h3>Creative &amp; Community Services</h3>
+      <div class="engine-sub">Project-based · Retainer · Consulting</div>
+      <p>Real work for real clients — film production, brand content, news, and TPC community advisory services. Engine 1 is cash-positive now and funds runway while Engine 2 scales.</p>
+      <ul class="slist">
+        <li>Film &amp; commercial production</li>
+        <li>Next Vision News (local media)</li>
+        <li>TPC Community Consultation</li>
+        <li>Active retainer client (tire &amp; auto)</li>
+        <li>Tulsa Film Tribe creative network</li>
+      </ul>
+    </div>
+    <div class="engine-card e2">
+      <span class="engine-badge">Engine 2</span>
+      <h3>AI Products &amp; Licensing</h3>
+      <div class="engine-sub">SaaS · Subscription · Licensable IP</div>
+      <p>Proprietary AI tools built for the creative and sports industries — starting with Club NVStudios, our flagship PWA, and Flow OS, our multi-profile operating system for teams and creators.</p>
+      <ul class="slist">
+        <li>Club NVStudios — $99/mo SaaS anchor</li>
+        <li>Flow OS — multi-profile team PWA</li>
+        <li>NV AI Skills — licensable modules</li>
+        <li>Mwezi wa Nne calendar system (IP)</li>
+        <li>White-label platform potential</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ANCHOR -->
+<div class="anchor fade-up d5">
+  <div>
+    <p class="slabel">The Subscription Anchor</p>
+    <h3 class="anchor-heading">Club NVStudios — $99/month</h3>
+    <p>Our flagship SaaS product serves sports clubs, youth programs, and creative organizations with content tools, media hosting, and team management — all AI-powered. Launched with Stripe integration, Supabase auth, and multi-tenant org isolation. This is the product that turns community trust into recurring revenue.</p>
+  </div>
+  <div class="anchor-stats">
+    <div class="stat"><span class="snum">~$4</span><span class="slbl">Blended CAC</span></div>
+    <div class="stat"><span class="snum">$1,188</span><span class="slbl">LTV / Member</span></div>
+    <div class="stat"><span class="snum">297×</span><span class="slbl">LTV : CAC</span></div>
+  </div>
+</div>
+
+<!-- FLYWHEEL -->
+<section class="flywheel fade-up d6">
+  <p class="slabel">How We Build Community</p>
+  <h2 class="sheading">The Community Flywheel</h2>
+  <p class="flywheel-intro">The community is not a marketing channel — it is the product's distribution, quality signal, and long-term moat. Each rotation of the flywheel compounds the next.</p>
+  <div class="fw-steps">
+    <div class="fw-step">
+      <span class="fw-num">01</span>
+      <div class="fw-title">Show Up &amp; Serve</div>
+      <div class="fw-desc">Engine 1 work puts NV in the room — producing films, coaching youth soccer, running Film Tribe. We earn trust before asking for anything.</div>
+    </div>
+    <div class="fw-step">
+      <span class="fw-num">02</span>
+      <div class="fw-title">Build the Network</div>
+      <div class="fw-desc">Filmmakers, coaches, and business owners become Film Tribe members and NVStudios users — a self-reinforcing creative economy.</div>
+    </div>
+    <div class="fw-step">
+      <span class="fw-num">03</span>
+      <div class="fw-title">Productize the Need</div>
+      <div class="fw-desc">Real problems inside the community become features inside our products. We build what they already want — no guessing required.</div>
+    </div>
+    <div class="fw-step">
+      <span class="fw-num">04</span>
+      <div class="fw-title">Revenue Funds More</div>
+      <div class="fw-desc">Subscription revenue funds deeper community programs — making the community stronger, which expands the customer base.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY PILLARS -->
+<section class="community fade-up d7">
+  <p class="slabel">Community Infrastructure</p>
+  <h2 class="sheading">Three Pillars of a Living Ecosystem</h2>
+  <p class="community-intro">Next Vision does not market to communities. We are built inside of them. These pillars are the infrastructure of a creative economy we are assembling in Tulsa — with a system designed to export.</p>
+  <div class="comm-grid">
+    <div class="comm-card">
+      <h4>Tulsa Film Tribe</h4>
+      <p>Filmmaker network with verified profiles and crew connections. The talent pipeline for Engine 1 and early adopter base for Engine 2.</p>
+    </div>
+    <div class="comm-card">
+      <h4>TPC — The People Consultation</h4>
+      <p>Community advisory and program design. The trust layer — how NV shows up in neighborhoods and institutions before asking for anything.</p>
+    </div>
+    <div class="comm-card">
+      <h4>NVStudio (Physical Space)</h4>
+      <p>Co-developed creative studio space — the physical proof that we are building here, not just for here.</p>
+    </div>
+    <div class="comm-card">
+      <h4>Tulsa Diamonds</h4>
+      <p>Youth soccer program. Sports is the on-ramp — families who trust us with their children's development trust us with their brand.</p>
+    </div>
+    <div class="comm-card">
+      <h4>Club NVStudios Platform</h4>
+      <p>The digital home of every club and team we serve. As clubs grow they bring their whole organization in — compounding growth.</p>
+    </div>
+    <div class="comm-card">
+      <h4>Flow OS</h4>
+      <p>Our internal operating system — now a product. Built on the Mwezi wa Nne 28-day rhythm system. IP no competitor can replicate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INTERACTIVE DRILL-DOWN ══ -->
+<section class="explorer fade-up d8">
+  <p class="slabel">Deep Dive — Click Any Tab</p>
+  <h2 class="sheading">Explore the Numbers</h2>
+  <p class="explorer-intro">Select any area below to explore the financials in detail. All figures are from audited management documents prepared June 2026. Individual names and banking details are withheld.</p>
+
+  <div class="tab-nav no-print">
+    <button class="tab-btn active" onclick="showTab('use-of-funds',this)">Use of Funds</button>
+    <button class="tab-btn" onclick="showTab('unit-econ',this)">Unit Economics</button>
+    <button class="tab-btn" onclick="showTab('monthly-model',this)">12-Month Model</button>
+    <button class="tab-btn" onclick="showTab('pnl',this)">P&amp;L History</button>
+    <button class="tab-btn" onclick="showTab('balance',this)">Balance Sheet</button>
+    <button class="tab-btn" onclick="showTab('cap-table',this)">Cap Table</button>
+  </div>
+
+  <!-- USE OF FUNDS -->
+  <div id="use-of-funds" class="tab-panel active">
+    <div class="funds-wrap">
+      <div class="funds-title">Capital Deployment — $12,500 Raise</div>
+      <div class="funds-sub">How every dollar of investor capital will be used across the two engines</div>
+
+      <div class="fund-row">
+        <span class="fund-engine fund-e1">Engine 1</span>
+        <span class="fund-label">Production Equipment</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:25.6%;background:var(--nv-red)"></div></div>
+        <span class="fund-amount">$3,200</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e1">Engine 1</span>
+        <span class="fund-label">Creative Crew Payments</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:21.6%;background:var(--nv-red)"></div></div>
+        <span class="fund-amount">$2,700</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e1">Engine 1</span>
+        <span class="fund-label">Sales &amp; Client Outreach</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:10.4%;background:var(--nv-red)"></div></div>
+        <span class="fund-amount">$1,300</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e1">Engine 1</span>
+        <span class="fund-label">Community Programs</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:7.8%;background:var(--nv-red)"></div></div>
+        <span class="fund-amount">$970</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e2">Engine 2</span>
+        <span class="fund-label">Paid Acquisition (First Tests)</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:12%;background:var(--nv-gold)"></div></div>
+        <span class="fund-amount">$1,500</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e2">Engine 2</span>
+        <span class="fund-label">Server &amp; Infrastructure</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:9.9%;background:var(--nv-gold)"></div></div>
+        <span class="fund-amount">$1,240</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e2">Engine 2</span>
+        <span class="fund-label">Product Dev &amp; AI APIs</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:8%;background:var(--nv-gold)"></div></div>
+        <span class="fund-amount">$1,000</span>
+      </div>
+      <div class="fund-row">
+        <span class="fund-engine fund-e2">Engine 2</span>
+        <span class="fund-label">Legal &amp; IP Assignment</span>
+        <div class="fund-bar-wrap"><div class="fund-bar" style="width:4.7%;background:var(--nv-gold)"></div></div>
+        <span class="fund-amount">$590</span>
+      </div>
+      <div class="funds-total">
+        <span>Total Raise</span>
+        <span>$12,500</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIT ECONOMICS -->
+  <div id="unit-econ" class="tab-panel">
+    <div class="cac-grid">
+      <div class="cac-card">
+        <span class="bnum">~$4</span>
+        <span class="blbl">Blended CAC</span>
+        <div class="bnote">$20 total paid marketing ÷ ~5 customers acquired. Every customer to date came through founder-led and referral channels.</div>
+      </div>
+      <div class="cac-card">
+        <span class="bnum">$1,188</span>
+        <span class="blbl">LTV (12-month gross)</span>
+        <div class="bnote">$99/mo × 12 months. At ~85% software gross margin, contribution LTV ≈ $1,010.</div>
+      </div>
+      <div class="cac-card">
+        <span class="bnum">&lt;1 mo</span>
+        <span class="blbl">CAC Payback Period</span>
+        <div class="bnote">At $99/month, the first subscription payment more than covers the current cost to acquire a customer.</div>
+      </div>
+    </div>
+    <div class="headroom-bar">
+      <h4>Acquisition Headroom — Current CAC vs. Sustainable Ceiling</h4>
+      <div class="bar-track">
+        <div class="bar-fill-ceiling"></div>
+        <div class="bar-fill-cac"></div>
+      </div>
+      <div class="bar-labels">
+        <span class="cac-marker">Current CAC: ~$4</span>
+        <span class="ceil-marker">Sustainable ceiling (3:1 LTV:CAC): ~$396</span>
+      </div>
+      <p class="headroom-note">Current acquisition cost sits roughly <strong>100× below</strong> the ceiling the model can sustain. That gap is the opportunity: this raise funds the first structured paid-acquisition experiments — with substantial margin for error before unit economics are at risk.</p>
+    </div>
+  </div>
+
+  <!-- MONTHLY MODEL -->
+  <div id="monthly-model" class="tab-panel">
+    <div class="model-wrap">
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Line Item</th>
+            <th>Jul'26</th><th>Aug'26</th><th>Sep'26</th><th>Oct'26</th>
+            <th>Nov'26</th><th>Dec'26</th><th>Jan'27</th><th>Feb'27</th>
+            <th>Mar'27</th><th>Apr'27</th><th>May'27</th><th>Jun'27</th>
+            <th style="background:#1a1713">Year 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mrow-section"><td colspan="14">SUBSCRIBERS</td></tr>
+          <tr><td>Subscribers — ending</td><td>3</td><td>5</td><td>7</td><td>9</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>18</td></tr>
+          <tr class="mrow-section"><td colspan="14">REVENUE</td></tr>
+          <tr><td>Subscription (Club NVStudios)</td><td>$297</td><td>$495</td><td>$693</td><td>$891</td><td>$1,089</td><td>$1,188</td><td>$1,287</td><td>$1,386</td><td>$1,485</td><td>$1,584</td><td>$1,683</td><td>$1,782</td><td>$13,860</td></tr>
+          <tr><td>Services / Retainer</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$1,800</td></tr>
+          <tr><td>Project Revenue</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$200</td><td>$2,400</td></tr>
+          <tr class="mrow-total"><td>Total Revenue</td><td>$647</td><td>$845</td><td>$1,043</td><td>$1,241</td><td>$1,439</td><td>$1,538</td><td>$1,637</td><td>$1,736</td><td>$1,835</td><td>$1,934</td><td>$2,033</td><td>$2,132</td><td>$18,060</td></tr>
+          <tr class="mrow-section"><td colspan="14">COSTS</td></tr>
+          <tr><td>Cost of Revenue</td><td>$202</td><td>$232</td><td>$261</td><td>$291</td><td>$321</td><td>$336</td><td>$351</td><td>$365</td><td>$380</td><td>$395</td><td>$410</td><td>$425</td><td>$3,969</td></tr>
+          <tr><td>Operating Expense (recurring)</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$211</td><td>$2,532</td></tr>
+          <tr><td>Creative Crew Payments</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$150</td><td>$1,800</td></tr>
+          <tr><td>Equipment (one-time, from raise)</td><td>$1,920</td><td>$1,280</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>$3,200</td></tr>
+          <tr class="mrow-total"><td>Total Costs</td><td>$2,281</td><td>$1,641</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$361</td><td>$7,532</td></tr>
+          <tr class="mrow-net"><td>Net Income / (Loss)</td>
+            <td style="color:#F87171">($1,836)</td><td style="color:#F87171">($1,028)</td>
+            <td style="color:#86EFAC">$421</td><td style="color:#86EFAC">$589</td><td style="color:#86EFAC">$757</td><td style="color:#86EFAC">$841</td>
+            <td style="color:#86EFAC">$925</td><td style="color:#86EFAC">$1,010</td><td style="color:#86EFAC">$1,094</td><td style="color:#86EFAC">$1,178</td>
+            <td style="color:#86EFAC">$1,262</td><td style="color:#86EFAC">$1,346</td>
+            <td style="color:#86EFAC">$6,559</td></tr>
+          <tr class="mrow-cash"><td>Cash — Ending</td>
+            <td>$11,331</td><td>$10,303</td><td>$10,724</td><td>$11,313</td><td>$12,070</td><td>$12,911</td>
+            <td>$13,836</td><td>$14,846</td><td>$15,940</td><td>$17,118</td><td>$18,380</td><td>$19,726</td>
+            <td>$19,726</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="model-note">Management projection, Jul 2026–Jun 2027. Assumes $12,500 raise received Month 1. Starting cash ~$667. Conservative assumptions: 2 new subscribers/month, 5% monthly churn, $150/mo retainer, $200/mo project average. Company turns cash-flow positive Month 3 (Sep 2026) and stays positive through year-end.</p>
+  </div>
+
+  <!-- P&L HISTORY -->
+  <div id="pnl" class="tab-panel">
+    <div class="fin-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Line Item</th>
+            <th>FY 2023</th><th>FY 2024</th><th>FY 2025</th><th>Q1 2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-header"><td colspan="5">REVENUE</td></tr>
+          <tr><td>Film / Production Revenue</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr><td>TPC Consultation Revenue</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr><td>Other Revenue</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr class="subtotal"><td>Total Revenue</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr class="group-header"><td colspan="5">OPERATING EXPENSES</td></tr>
+          <tr><td>Software &amp; Subscriptions</td><td class="muted">—</td><td>$20</td><td>$79</td><td>$4</td></tr>
+          <tr><td>Web Hosting &amp; Domains</td><td class="muted">—</td><td>$48</td><td>$292</td><td>$99</td></tr>
+          <tr><td>AI &amp; API Costs</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td>$81</td></tr>
+          <tr><td>Sales &amp; Marketing</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr><td>Office Supplies &amp; Materials</td><td class="muted">—</td><td>$76</td><td>$94</td><td>$320</td></tr>
+          <tr><td>Legal &amp; Filing Fees</td><td class="muted">—</td><td class="muted">—</td><td>$26</td><td>$31</td></tr>
+          <tr class="subtotal"><td>Total Operating Expenses</td><td>—</td><td>$143</td><td>$491</td><td>$535</td></tr>
+          <tr class="total"><td>Net Income / (Loss)</td>
+            <td>—</td>
+            <td class="neg">($143)</td>
+            <td class="neg">($491)</td>
+            <td class="neg">($535)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bs-note">Cash basis. Revenue shown as zero because first Stripe payments processed mid-2026, after these periods. The company spent lean — total cumulative operating spend through Q1 2026 was $1,169. No outside debt was ever carried. First customer revenue was collected in 2026 (outside these historical periods).</p>
+  </div>
+
+  <!-- BALANCE SHEET -->
+  <div id="balance" class="tab-panel">
+    <div class="fin-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Line Item</th>
+            <th>FY 2023</th><th>FY 2024</th><th>FY 2025</th><th>Q1 2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-header"><td colspan="5">ASSETS</td></tr>
+          <tr><td>Cash &amp; Cash Equivalents</td><td>$150</td><td>$167</td><td>$160</td><td>$367</td></tr>
+          <tr><td>Accounts Receivable</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr class="subtotal"><td>Total Current Assets</td><td>$150</td><td>$167</td><td>$160</td><td>$367</td></tr>
+          <tr><td>Equipment &amp; Gear, Net</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td>$4,000</td></tr>
+          <tr class="total"><td>TOTAL ASSETS</td><td>$150</td><td>$167</td><td>$160</td><td>$4,367</td></tr>
+          <tr class="group-header"><td colspan="5">LIABILITIES</td></tr>
+          <tr><td>Accounts Payable</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr><td>Loans / Notes Payable</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td></tr>
+          <tr class="total"><td>TOTAL LIABILITIES</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr class="group-header"><td colspan="5">MEMBERS' EQUITY</td></tr>
+          <tr><td>Member Capital Contributions (cumulative)</td><td>$150</td><td>$310</td><td>$795</td><td>$5,537</td></tr>
+          <tr><td>Retained Earnings / (Accumulated Deficit)</td><td class="muted">—</td><td class="neg">($143)</td><td class="neg">($635)</td><td class="neg">($1,170)</td></tr>
+          <tr class="subtotal"><td>Total Members' Equity</td><td>$150</td><td>$167</td><td>$160</td><td>$4,367</td></tr>
+          <tr class="total"><td>TOTAL LIABILITIES &amp; EQUITY</td><td>$150</td><td>$167</td><td>$160</td><td>$4,367</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bs-note">The company carries <strong>zero debt</strong> — all capital is member equity contributions. Equipment ($4,000 net) reflects founder-contributed gear recorded at fair value as an in-kind capital contribution. The accumulated deficit ($1,170 through Q1 2026) represents build-phase investment in product and infrastructure.</p>
+  </div>
+
+  <!-- CAP TABLE -->
+  <div id="cap-table" class="tab-panel">
+    <div class="cap-grid">
+      <div class="cap-card">
+        <h4>Pre-Investment Ownership</h4>
+        <div class="cap-row"><span class="role">Founder &amp; CEO (60%)</span><span class="pct">60.0%</span><span class="val">$36,000</span></div>
+        <div class="cap-row"><span class="role">Co-Founder &amp; CFO (40%)</span><span class="pct">40.0%</span><span class="val">$24,000</span></div>
+        <div class="cap-row"><span class="role">New Investor</span><span class="pct muted">—</span><span class="val muted">—</span></div>
+        <div class="cap-row"><span class="role">Total</span><span class="pct">100.0%</span><span class="val">$60,000</span></div>
+      </div>
+      <div class="cap-card">
+        <h4>Post-Investment Ownership <span style="font-size:10px;font-weight:500;color:var(--nv-faint);text-transform:none;letter-spacing:0">(illustrative at $12,500 raise)</span></h4>
+        <div class="cap-row"><span class="role">Founder &amp; CEO</span><span class="pct">49.7%</span><span class="val">$36,000</span></div>
+        <div class="cap-row"><span class="role">Co-Founder &amp; CFO</span><span class="pct">33.1%</span><span class="val">$24,000</span></div>
+        <div class="cap-row"><span class="role">New Investor</span><span class="pct cap-highlight">17.2%</span><span class="val cap-highlight">$12,500</span></div>
+        <div class="cap-row"><span class="role">Total</span><span class="pct">100.0%</span><span class="val">$72,500</span></div>
+      </div>
+    </div>
+    <p class="cap-note">Pre-money valuation: $60,000. Investment: $12,500. Post-money: $72,500. Assumes straight membership-interest purchase. Names withheld in this document — full cap table with legal names available under NDA. Final terms, structure, and valuation set with an Oklahoma attorney before closing. As a member-managed LLC, investment is typically structured as a membership-interest purchase or convertible note.</p>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<div class="closing fade-up d9">
+  <p><strong>We are not asking for money to build something from scratch.</strong> We are asking for capital to scale something that is already working — a creative economy with a proven community flywheel, a flagship SaaS product live in market, and unit economics that most Series A companies would envy.</p>
+  <p style="margin-top:12px">The goal is not to be the biggest technology company in Tulsa. The goal is to build a model — in Tulsa — that proves creative communities and scalable technology are not opposites. Then show other cities how it is done.</p>
+  <div class="closing-sig">
+    <div>
+      <span class="sig-name">Paul Said (Polito)</span>
+      <span class="sig-title">Founder &amp; CEO, Next Vision LLC</span>
+    </div>
+    <span class="sig-date">JUNE 2026 · CONFIDENTIAL</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><strong>Next Vision LLC</strong> · Tulsa, Oklahoma · Founded 2023 · All figures management estimates prepared for investor discussion</p>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</footer>
+
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
